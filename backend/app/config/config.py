@@ -11,12 +11,33 @@ def get_config(conf_type=None):
 
 class Config(object):
     # BSAE_DIR = os.path.abspath(os.path.dirname(__file__))
-
     SECRET_KEY = 'dev'
-
     DEBUG = True
 
 
-if __name__ == '__main__':
-    # print(get_config('mysql'))
-    pass
+class DevelopmentConfig(Config):
+    DEBUG = True
+    HOSTNAME = "123.249.13.235"
+    PORT = 16030
+    DB_NAME = "bookCity"
+    USERNAME = "bookCity"
+    PASSWORD = "bookCity"
+
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://%s:%s@%s:%s/%s?charset=utf8mb4' % (
+        USERNAME, PASSWORD, HOSTNAME, PORT, DB_NAME)
+
+class ProductionConfig(Config):
+    DEBUG = False
+    HOSTNAME = "123.249.13.235"
+    PORT = 16030
+    DB_NAME = "bookCity"
+    USERNAME = "bookCity"
+    PASSWORD = "bookCity"
+    SQLALCHEMY_DATABASE_URI = 'mariadb://%s:%s@%s:%s/%s?charset=utf8mb4' % (
+    USERNAME, PASSWORD, HOSTNAME, PORT, DB_NAME)
+
+
+config = {
+    'develop': DevelopmentConfig,
+    'production': ProductionConfig
+}
