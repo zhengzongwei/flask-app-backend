@@ -15,6 +15,8 @@ def create_app(config: str = None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    from app.common import db
+    db.init_app(app)
 
     from app.api import api
     app.register_blueprint(api)
