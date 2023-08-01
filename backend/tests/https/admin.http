@@ -1,0 +1,21 @@
+POST http://{{ip}}:{{port}}/api/v1/admin/
+Content-Type: application/json
+
+{
+  "books": [
+    {
+      "name": "C# 程序设计",
+      "author": "徐波"
+    }
+  ]
+}
+
+###
+
+
+GET http://{{ip}}:{{port}}/api/v1/admin/
+Accept: application/json
+
+###
+
+

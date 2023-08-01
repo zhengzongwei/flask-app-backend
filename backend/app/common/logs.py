@@ -10,12 +10,13 @@ import platform
 from logging import handlers
 
 
+LOG_CONFIG_PATH = "app/config/config.toml"
 class LoggerBase(object):
     """
     日志模块
     """
 
-    def __init__(self, logger_name, log_config_path="logs.toml") -> None:
+    def __init__(self, logger_name, log_config_path=LOG_CONFIG_PATH) -> None:
 
         log_config = self.get_log_config(log_config_path)
         self.logger_name = logger_name
@@ -96,7 +97,7 @@ class LoggerBase(object):
 
 
 class Logger(LoggerBase):
-    def __init__(self, logger_name, log_config_path="logs.toml"):
+    def __init__(self, logger_name, log_config_path=LOG_CONFIG_PATH):
         super().__init__(logger_name, log_config_path=log_config_path)
 
     def debug(self, msg):

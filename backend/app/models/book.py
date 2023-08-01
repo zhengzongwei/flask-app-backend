@@ -2,6 +2,7 @@ import datetime
 
 from app.common.db import db
 from .base import BaseModel
+from sqlalchemy import DDL
 
 
 class Books(BaseModel, db.Model):
@@ -10,7 +11,7 @@ class Books(BaseModel, db.Model):
     """
     __tablename__ = "db_books"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     author = db.Column(db.String(50), nullable=False)
     comment = db.Column(db.String(200))
@@ -34,6 +35,9 @@ class Books(BaseModel, db.Model):
             "url": self.url if self.url else "",
         }
         return resp_dict
+
+mysql_autoincrement_start = DDL("ALTER TABLE db_books AUTO_INCREMENT = 1001;")
+db.event.listen(Books.__table__, 'after_create', mysql_autoincrement_start)
 
 
 class Publish(BaseModel, db.Model):

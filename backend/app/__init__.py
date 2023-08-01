@@ -6,10 +6,10 @@ from app.common.db import db
 from app.models.book import Books, Publish
 
 
-def create_app(config: str = None):
+def create_app(config: str = ''):
     app = Flask(__name__, instance_relative_config=True)
 
-    if config is None:
+    if config == '':
         app.config.from_object(cfg['develop'])
     else:
         app.config.from_object(cfg[config])
@@ -18,7 +18,6 @@ def create_app(config: str = None):
     #     os.makedirs(app.instance_path)
     # except OSError:
     #     pass
-
 
     db.init_app(app)
 
@@ -30,4 +29,3 @@ def create_app(config: str = None):
     app.register_blueprint(api)
 
     return app
-
