@@ -5,7 +5,8 @@ Content-Type: application/json
   "books": [
     {
       "name": "C# 程序设计",
-      "author": "徐波"
+      "author": "徐波",
+      "publisher": "清华大学出版社"
     }
   ]
 }
