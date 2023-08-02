@@ -2,7 +2,7 @@ from flask import jsonify,request
 
 from . import admin as api
 
-from app.models.book import Books
+from app.models.book import Books,Author
 from app.common.db import db
 """
 给接口添加 访问权限，判断是否有权限访问
@@ -19,6 +19,7 @@ def books():
     if request.method == "GET":
         books_info = Books.query.all()
         if books:
+            print(books)
             for book in books_info:
                 data['data'].append(book.to_json())
     elif request.method == "POST":
@@ -27,11 +28,17 @@ def books():
         if 'books' in request_data:
             for book_info in request_data['books']:
                 if book_info['name'] and book_info['author']:
+                    # author = Books.query.filter(Books.author == book_info['author'])
                     book = Books()
+                    author = Author()
+                    author_info = author.query.filter(author.name==book_info['author']).first()
+                    if not author_info:
+                        author.name = book_info['author']
+
                     book.name = book_info['name']
-                    book.author = book_info['author']
+                    book.author = [author]
                     try:
-                        db.session.add(book)
+                        db.session.add_all([book])
                         db.session.commit()
                     except Exception as e:
                         db.session.rollback()
