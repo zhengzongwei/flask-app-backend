@@ -1,9 +1,10 @@
-from flask import jsonify,request
+from flask import jsonify, request
 
 from . import admin as api
 
-from app.models.book import Books,Author
+from app.models.book import Books, Author, Publish
 from app.common.db import db
+
 """
 给接口添加 访问权限，判断是否有权限访问
 """
@@ -31,10 +32,18 @@ def books():
                     # author = Books.query.filter(Books.author == book_info['author'])
                     book = Books()
                     author = Author()
-                    author_info = author.query.filter(author.name==book_info['author']).first()
+                    publisher = Publish()
+
+                    author_info = author.query.filter(author.name == book_info['author']).first()
                     if not author_info:
                         author.name = book_info['author']
 
+                    if book_info.get("publisher"):
+                        publisher_info = publisher.query.filter(publisher.name == book_info['publisher']).first()
+                        if not publisher_info:
+                            publisher.name = book_info['publisher']
+
+                    book.publisher = publisher
                     book.name = book_info['name']
                     book.author = [author]
                     try:
