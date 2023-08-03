@@ -23,8 +23,9 @@ class DevelopmentConfig(Config):
     USERNAME = "bookCity"
     PASSWORD = "bookCity"
 
-    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://%s:%s@%s:%s/%s?charset=utf8mb4' % (
+    SQLALCHEMY_DATABASE_URI = 'mysql+mysqlconnector://%s:%s@%s:%s/%s?charset=utf8' % (
         USERNAME, PASSWORD, HOSTNAME, PORT, DB_NAME)
+
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -34,7 +35,7 @@ class ProductionConfig(Config):
     USERNAME = "bookCity"
     PASSWORD = "bookCity"
     SQLALCHEMY_DATABASE_URI = 'mariadb://%s:%s@%s:%s/%s?charset=utf8mb4' % (
-    USERNAME, PASSWORD, HOSTNAME, PORT, DB_NAME)
+        USERNAME, PASSWORD, HOSTNAME, PORT, DB_NAME)
 
 
 config = {

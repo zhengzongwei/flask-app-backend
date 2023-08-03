@@ -1,12 +1,12 @@
-POST http://{{ip}}:{{port}}/api/v1/admin/
+POST http://{{ip}}:{{port}}/api/v1/books/
 Content-Type: application/json
 
 {
   "books": [
     {
-      "name": "C# 程序设计",
-      "author": "徐波",
-      "publisher": "清华大学出版社"
+      "name": "JAVA 程序设计1",
+      "author": ["徐1波","徐2波"],
+      "publisher": ["清华大学出版社1","人民出版社"]
     }
   ]
 }

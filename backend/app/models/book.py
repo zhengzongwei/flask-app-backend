@@ -20,6 +20,7 @@ class Books(BaseModel, db.Model):
     version = db.Column(db.String(10))
     recomLevel = db.Column(db.String(10))
     url = db.Column(db.String(50))
+    is_delete = db.Column(db.Boolean, default=False)
     author = relationship("Author", secondary="book_m2m_author", backref=db.backref("db_books", lazy="dynamic"))
     publisher = db.relationship("Publish")
 

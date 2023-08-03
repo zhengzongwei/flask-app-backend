@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask_migrate import Migrate
 from app.config.config import config as cfg
 from app.common.db import db
 from app.models.book import Books, Publish
@@ -20,10 +21,9 @@ def create_app(config: str = ''):
     #     pass
 
     db.init_app(app)
-
-    with app.app_context():
-        print("hello world")
-        db.create_all()
+    migrate = Migrate(app, db)
+    # with app.app_context():
+    #     db.create_all()
 
     from app.api import api
     app.register_blueprint(api)
