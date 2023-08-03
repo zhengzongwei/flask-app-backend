@@ -82,20 +82,22 @@ def add_book():
     return data
 
 
-@api.route('/<int:book_id>', methods=['PUT'])
-def update_book(book_id):
-    pass
+# @api.route('/<int:book_id>', methods=['PUT'])
+# def update_book(book_id):
+#     request_data = request.get_json()
+#
+#     book = Books.query.filter(Books.id == book_id).update(name=request_data.get('name'))
+#     print(book)
+#     return data
 
 
 @api.route('/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
-    book = Books.query.filter(Books.id == book_id).first()
+    book = Books.query.filter(Books.id == book_id).update({"is_delete": True})
     try:
-        db.session.delete(book)
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         data['code'] = 1001
         data['message'] = "数据保存失败,err=%s" % e
-
     return data

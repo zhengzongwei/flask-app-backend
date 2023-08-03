@@ -1,10 +1,16 @@
+DELETE http://{{ip}}:{{port}}/api/v1/books/1
+Accept: application/json
+
+###
+
+
 POST http://{{ip}}:{{port}}/api/v1/books/
 Content-Type: application/json
 
 {
   "books": [
     {
-      "name": "JAVA 程序设计1",
+      "name": "JAVA 程序设计11",
       "author": ["徐1波","徐2波"],
       "publisher": ["清华大学出版社1","人民出版社"]
     }
