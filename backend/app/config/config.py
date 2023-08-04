@@ -13,6 +13,10 @@ class Config(object):
     # BSAE_DIR = os.path.abspath(os.path.dirname(__file__))
     SECRET_KEY = 'dev'
     DEBUG = True
+    BABEL_DEFAULT_LOCALE = 'zh'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(os.path.abspath(os.path.dirname(BSAE_DIR)), "locale")
+    # BABEL_DOMAIN = 'messages'
 
 
 class DevelopmentConfig(Config):

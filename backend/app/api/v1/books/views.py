@@ -1,15 +1,21 @@
 from flask import jsonify, request
 
 from . import books as api
-
+from app.common.logs import Logger
+from flask_babel import gettext as _
 from app.models.book import Books, Author, Publish
-from app.common.db import db
+from app.common.common import db
+from app.schema.book import BookSchema
+from app.utils.code import Code
 
-data = {"code": 0, "msg": 'success', 'data': []}
+LOG = Logger("book")
+
+data = {"code": 0, "msg": ("Success")}
 
 
 @api.route('/', methods=['GET'])
 def books():
+    data['data'] = list()
     books_info = Books.query.all()
     if books:
         for book in books_info:
@@ -19,6 +25,8 @@ def books():
 
 @api.route('/<int:book_id>', methods=['GET'])
 def get_book(book_id):
+    data['data'] = list()
+    data['msg'] = _("Success")
     book = Books.query.filter(Books.id == book_id).first()
     data['data'].append(book.to_json())
     return data
@@ -27,58 +35,62 @@ def get_book(book_id):
 @api.route('/', methods=['POST'])
 def add_book():
     request_data = request.get_json()
-    if 'books' in request_data:
-        add_book = []
-        for book_info in request_data['books']:
-            book = Books()
-            if not book_info['author']:
-                return {
-                    'code': -1,
-                    'msg': "参数校验不通过，缺失 books"
-                }
-
-            add_authors = []
-            for _author in book_info['author']:
-                author_info = Author.query.filter(Author.name == _author).first()
-                if author_info is None:
-                    add_authors.append(Author(name=_author))
-            book.author = add_authors
-
-            if not book_info['publisher']:
-                return {
-                    'code': -1,
-                    'msg': f"参数校验不通过，缺失 publisher"
-                }
-
-            add_publisher = []
-            for _publisher in book_info['publisher']:
-                publisher = Publish.query.filter(Publish.name == _publisher).first()
-                if publisher is None:
-                    add_publisher.append(Publish(name=_publisher))
-            book.publisher = add_publisher
-
-            if not book_info['name']:
-                return {
-                    'code': -1,
-                    'msg': "参数校验不通过，缺失 name"
-                }
-
-            _book = Books.query.filter(Books.name == book_info['name']).first()
-            if _book is not None:
-                return {
-                    'code': 1001,
-                    'msg': f"书籍 {book_info['name']} 已存在"
-                }
-            book.name = book_info['name']
-            add_book.append(book)
-
-        try:
-            db.session.add_all(add_book)
-            db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            data['code'] = 1001
-            data['message'] = "数据保存失败,err=%s" % e
+    LOG.debug(f'the request_data {request_data}')
+    book_schema = BookSchema()
+    data = book_schema.load(request_data['books'], many=True)
+    LOG.debug(f'the data {data}')
+    # if 'books' in request_data:
+    #     add_book = []
+    #     for book_info in request_data['books']:
+    #         book = Books()
+    #         if not book_info['author']:
+    #             return {
+    #                 'code': -1,
+    #                 'msg': "参数校验不通过，缺失 books"
+    #             }
+    #
+    #         add_authors = []
+    #         for _author in book_info['author']:
+    #             author_info = Author.query.filter(Author.name == _author).first()
+    #             if author_info is None:
+    #                 add_authors.append(Author(name=_author))
+    #         book.author = add_authors
+    #
+    #         if not book_info['publisher']:
+    #             return {
+    #                 'code': -1,
+    #                 'msg': f"参数校验不通过，缺失 publisher"
+    #             }
+    #
+    #         add_publisher = []
+    #         for _publisher in book_info['publisher']:
+    #             publisher = Publish.query.filter(Publish.name == _publisher).first()
+    #             if publisher is None:
+    #                 add_publisher.append(Publish(name=_publisher))
+    #         book.publisher = add_publisher
+    #
+    #         if not book_info['name']:
+    #             return {
+    #                 'code': -1,
+    #                 'msg': "参数校验不通过，缺失 name"
+    #             }
+    #
+    #         _book = Books.query.filter(Books.name == book_info['name']).first()
+    #         if _book is not None:
+    #             return {
+    #                 'code': 1001,
+    #                 'msg': f"书籍 {book_info['name']} 已存在"
+    #             }
+    #         book.name = book_info['name']
+    #         add_book.append(book)
+    #
+    #     try:
+    #         db.session.add_all(add_book)
+    #         db.session.commit()
+    #     except Exception as e:
+    #         db.session.rollback()
+    #         data['code'] = 1001
+    #         data['message'] = "数据保存失败,err=%s" % e
     return data
 
 
@@ -99,5 +111,5 @@ def delete_book(book_id):
     except Exception as e:
         db.session.rollback()
         data['code'] = 1001
-        data['message'] = "数据保存失败,err=%s" % e
+        data['message'] = _("数据保存失败,err=%s") % e
     return data

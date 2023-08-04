@@ -1,6 +1,6 @@
 import datetime
 
-from app.common.db import db
+from app.common.common import db
 from .base import BaseModel
 from sqlalchemy import DDL, ForeignKey
 from sqlalchemy.orm import relationship

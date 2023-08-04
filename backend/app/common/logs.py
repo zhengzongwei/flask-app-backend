@@ -4,13 +4,16 @@
 import logging
 import toml
 import os
+import time
 
 import platform
 
 from logging import handlers
 
-
 LOG_CONFIG_PATH = "app/config/config.toml"
+LOG_PATH = "instance"
+
+
 class LoggerBase(object):
     """
     日志模块
@@ -53,8 +56,7 @@ class LoggerBase(object):
 
     def config_log(self):
         if platform.system().lower() == 'windows':
-            base_dir = (os.path.dirname(os.path.abspath(__file__)))
-            log_path = f'{base_dir}\log.log'
+            log_path = f'{LOG_PATH}\log_{time.strftime("%Y-%m-%d", time.localtime(time.time()))}.log'
         else:
             log_path = self.log_path
         self.init_log(log_path=log_path, log_format=self.log_format)

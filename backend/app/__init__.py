@@ -1,11 +1,8 @@
 import os
-
 from flask import Flask
-from flask_migrate import Migrate
+from app.initialize.initialize import init_app, init_blueprint
 from app.config.config import config as cfg
-from app.common.db import db
-from app.models.book import Books, Publish
-
+from flask_babel import Babel
 
 def create_app(config: str = ''):
     app = Flask(__name__, instance_relative_config=True)
@@ -15,17 +12,11 @@ def create_app(config: str = ''):
     else:
         app.config.from_object(cfg[config])
 
-    # try:
-    #     os.makedirs(app.instance_path)
-    # except OSError:
-    #     pass
-
-    db.init_app(app)
-    migrate = Migrate(app, db)
-    # with app.app_context():
-    #     db.create_all()
-
-    from app.api import api
-    app.register_blueprint(api)
-
+    try:
+        os.makedirs(app.instance_path)
+    except OSError:
+        pass
+    init_app(app)
+    init_blueprint(app)
+    print(app.config)
     return app

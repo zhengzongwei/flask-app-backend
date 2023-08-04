@@ -1,6 +1,6 @@
 import datetime
 
-from app.common.db import db
+from app.common.common import db
 
 
 class BaseModel(object):
