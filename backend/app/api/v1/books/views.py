@@ -82,6 +82,7 @@ def add_book():
                     'msg': _("Book %s Already exists" % book_info['name'])
                 }
             book.name = book_info['name']
+            book.isbn = book_info['isbn']
             add_book.append(book)
 
         try:

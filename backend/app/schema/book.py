@@ -5,6 +5,7 @@ from marshmallow import fields, validates, ValidationError
 class BookSchema(ma.Schema):
     id = fields.Integer()
     name = fields.String(required=True)
+    isbn = fields.String()
     common = fields.String()
     author = fields.List(fields.String(required=True))
     publisher = fields.List(fields.String(required=True))

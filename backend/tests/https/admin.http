@@ -3,7 +3,7 @@
 #
 ####
 
-GET http://{{ip}}:{{port}}/api/v1/books/1
+GET http://{{ip}}:{{port}}/api/v1/books/
 Accept: application/json
 
 
@@ -28,9 +28,10 @@ Content-Type: application/json
 {
   "books": [
     {
-      "name": "KVM 虚拟机高级管理",
-      "author": ["胡金庸","聂安泰"],
-      "publisher": ["中国教育出版社","清华大学出版社"]
+      "name": "C# 程序设计与应用开发",
+      "author": ["曾宪权","曹玉松","鄢靖丰"],
+      "isbn": "9787302571858",
+      "publisher": ["清华大学出版社"]
     }
   ]
 }

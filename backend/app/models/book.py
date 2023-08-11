@@ -29,6 +29,7 @@ class Books(BaseModel, db.Model):
         resp_dict = {
             "id": self.id,
             "name": self.name,
+            "isbn": self.isbn,
             "author": [author.name for author in self.author],
             "comment": self.comment if self.comment else "",
             "publisher": [publisher.name for publisher in self.publisher],
