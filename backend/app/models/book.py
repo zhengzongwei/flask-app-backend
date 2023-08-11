@@ -2,7 +2,7 @@ import datetime
 
 from app.common.common import db
 from .base import BaseModel
-from sqlalchemy import DDL, ForeignKey
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship
 
 
@@ -21,8 +21,8 @@ class Books(BaseModel, db.Model):
     recomLevel = db.Column(db.String(10))
     url = db.Column(db.String(50))
     is_delete = db.Column(db.Boolean, default=False)
-    author = relationship("Author", secondary="book_m2m_author", backref=db.backref("db_books", lazy="dynamic"))
-    publisher = db.relationship("Publish")
+    author = relationship("Author", secondary="book_m2m_author", back_populates='book_id')
+    publisher = relationship("Publish", secondary="book_m2m_publish", back_populates='book_id')
 
     def to_json(self):
         resp_dict = {
@@ -39,17 +39,13 @@ class Books(BaseModel, db.Model):
         return resp_dict
 
 
-#
-# mysql_autoincrement_start = DDL("ALTER TABLE db_books AUTO_INCREMENT = 1001;")
-# db.event.listen(Books.__table__, 'after_create', mysql_autoincrement_start)
-
-
 class Author(BaseModel, db.Model):
     __tablename__ = "db_authors"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     phone = db.Column(db.String(11))
     addr = db.Column(db.String(80))
+    book_id = relationship("Books", secondary="book_m2m_author", back_populates="author")
 
     def to_json(self):
         resp_dict = {
@@ -65,11 +61,17 @@ class Book_m2m_author(BaseModel, db.Model):
     author_id = db.Column(db.Integer, ForeignKey("db_authors.id"))
 
 
+class Book_m2m_publish(BaseModel, db.Model):
+    __tablename__ = "book_m2m_publish"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    book_id = db.Column(db.Integer, ForeignKey("db_books.id"))
+    publish_id = db.Column(db.Integer, ForeignKey("db_publish.id"))
+
+
 class Publish(BaseModel, db.Model):
     """出版社"""
     __tablename__ = "db_publish"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     isbn = db.Column(db.String(80), unique=True, nullable=True)
-    book_id = db.Column(db.Integer, db.ForeignKey("db_books.id"))
-    # relate_book = db.relationship("Books", backref="relate_publish", lazy="dynamic")
+    book_id = relationship("Books", secondary="book_m2m_publish", back_populates="publisher")

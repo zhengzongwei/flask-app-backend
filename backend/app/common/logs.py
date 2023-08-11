@@ -55,10 +55,10 @@ class LoggerBase(object):
             self.log_level = logging.WARNING
 
     def config_log(self):
-        if platform.system().lower() == 'windows':
-            log_path = f'{LOG_PATH}\log_{time.strftime("%Y-%m-%d", time.localtime(time.time()))}.log'
-        else:
-            log_path = self.log_path
+        # if platform.system().lower() == 'windows':
+        log_path = f'{LOG_PATH}/log_{time.strftime("%Y-%m-%d", time.localtime(time.time()))}.log'
+        # else:
+        #     log_path = self.log_path
         self.init_log(log_path=log_path, log_format=self.log_format)
 
     def init_log(self, log_path=None, log_format=None):

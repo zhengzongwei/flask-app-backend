@@ -6,7 +6,7 @@ from app.common.common import db
 from app.common.common import ma
 from app.common.logs import Logger
 
-from app.models.book import Books, Publish
+from app.models.book import Books
 
 logger = Logger("initialize")
 
