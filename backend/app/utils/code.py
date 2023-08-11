@@ -1,3 +1,5 @@
+from flask_babel import gettext as _
+
 """
 
 1000: 数据库类错误
@@ -5,13 +7,17 @@
 
 """
 
+
 class Code:
     OK = 0
     UNKOWNERR = -1
+    DB_ERR = 1001
+
 
 StatusMap = {
     Code.OK: "Success",
-    Code.UNKOWNERR: "UNKOWNERR"
+    Code.UNKOWNERR: "UNKNOWN ERR",
+    Code.DB_ERR: "DB ERROR"
 }
 
 # error_map = {

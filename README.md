@@ -23,5 +23,7 @@ pybabel compile -d locale
 
 # 更新翻译模版
 pybabel update -i messages.pot -d locale
+
+pybabel --list-locales 
 ```
 

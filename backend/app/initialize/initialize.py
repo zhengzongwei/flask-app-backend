@@ -5,8 +5,7 @@ from flask_babel import Babel
 from app.common.common import db
 from app.common.common import ma
 from app.common.logs import Logger
-
-from app.models.book import Books
+from .db import init_app as init_db
 
 logger = Logger("initialize")
 
@@ -22,5 +21,8 @@ def init_app(app):
 
     Babel(app)
     db.init_app(app)
+    init_db(app)
     Migrate(app, db)
     ma.init_app(app)
+
+

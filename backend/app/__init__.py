@@ -18,4 +18,5 @@ def create_app(config: str = ''):
         pass
     init_app(app)
     init_blueprint(app)
+
     return app

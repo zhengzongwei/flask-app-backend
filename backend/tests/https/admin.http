@@ -3,7 +3,7 @@
 #
 ####
 
-GET http://{{ip}}:{{port}}/api/v1/books/12
+GET http://{{ip}}:{{port}}/api/v1/books/1
 Accept: application/json
 
 

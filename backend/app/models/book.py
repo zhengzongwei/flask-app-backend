@@ -20,6 +20,7 @@ class Books(BaseModel, db.Model):
     version = db.Column(db.String(10))
     recomLevel = db.Column(db.String(10))
     url = db.Column(db.String(50))
+    isbn = db.Column(db.String(80), unique=True, nullable=True)
     is_delete = db.Column(db.Boolean, default=False)
     author = relationship("Author", secondary="book_m2m_author", back_populates='book_id')
     publisher = relationship("Publish", secondary="book_m2m_publish", back_populates='book_id')
@@ -73,5 +74,4 @@ class Publish(BaseModel, db.Model):
     __tablename__ = "db_publish"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
-    isbn = db.Column(db.String(80), unique=True, nullable=True)
     book_id = relationship("Books", secondary="book_m2m_publish", back_populates="publisher")

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-08-11 10:39+0800\n"
-"PO-Revision-Date: 2023-08-11 10:39+0800\n"
+"POT-Creation-Date: 2023-08-11 15:47+0800\n"
+"PO-Revision-Date: 2023-08-11 15:42+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_Hans_CN\n"
 "Language-Team: zh_Hans_CN <LL@li.org>\n"
@@ -18,12 +18,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.12.1\n"
 
-#: api/v1/books/views.py:13 api/v1/books/views.py:29
+#: api/v1/books/views.py:49
+msgid "Parameter validation failed,Missing book"
+msgstr "参数校验失败 book"
+
+#: api/v1/books/views.py:62
+msgid "Parameter validation failed,Missing publisher"
+msgstr "参数校验失败 publisher"
+
+#: api/v1/books/views.py:75
+msgid "Parameter validation failed,Missing name "
+msgstr "参数校验失败 name"
+
+#: api/v1/books/views.py:82
+#, fuzzy, python-format
+msgid "Book %s Already existsname"
+msgstr "书籍 %s 已存在"
+
+#: api/v1/books/views.py:93 api/v1/books/views.py:143 api/v1/books/views.py:156
+#, python-format
+msgid "Data save failed,err=%s"
+msgstr "数据存储失败"
+
+#: initialize/db.py:15
+msgid "Initialized the database."
+msgstr "数据库初始化完成"
+
 msgid "Success"
 msgstr "成功"
 
-#: api/v1/books/views.py:114
-#, python-format
-msgid "数据保存失败,err=%s"
-msgstr ""
-
+msgid "UNKNOWN ERR"
+msgstr "未知错误"
