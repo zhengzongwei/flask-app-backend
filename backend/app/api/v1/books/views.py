@@ -10,7 +10,7 @@ from app.utils.code import Code
 
 LOG = Logger("book")
 
-data = {"code": 0, "msg": ("Success")}
+data = {"code": 0, "msg": _("Success")}
 
 
 @api.route('/', methods=['GET'])
@@ -94,13 +94,55 @@ def add_book():
     return data
 
 
-# @api.route('/<int:book_id>', methods=['PUT'])
-# def update_book(book_id):
-#     request_data = request.get_json()
-#
-#     book = Books.query.filter(Books.id == book_id).update(name=request_data.get('name'))
-#     print(book)
-#     return data
+@api.route('/<int:book_id>', methods=['PUT'])
+def update_book(book_id):
+    request_data = request.get_json()
+    print(request_data)
+    book_schema = BookSchema()
+    data = book_schema.load(request_data['books'])
+    LOG.info(f"the schema data {data}")
+    book = Books.query.filter(Books.id == book_id).first()
+    print(book.author)
+    # db [author1 ,author2]
+    # data [author3]
+
+    del_author = []
+    for _author in book.author:
+        if _author.name in data['author']:
+            data['author'].remove(_author.name)
+        else:
+            del_author.append(_author)
+
+    for _del_author in del_author:
+        book.author.remove(_del_author)
+
+    if data['author']:
+        for _author in data['author']:
+            book.author.append(Author(name=_author))
+
+    del_publish = []
+    for _publish in book.publisher:
+        if _publish.name in data['publisher']:
+            data['author'].remove(_publish.name)
+        else:
+            del_publish.append(_publish)
+    for _del_publish in del_publish:
+        book.author.remove(_del_publish)
+    if data['publisher']:
+        for _publish in data['author']:
+            book.publisher.append(Publish(name=_publish))
+
+    if book.name != data['name']:
+        book.name = data['name']
+
+    try:
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        data['code'] = 1001
+        data['message'] = _("数据保存失败,err=%s") % e
+
+    return data
 
 
 @api.route('/<int:book_id>', methods=['DELETE'])

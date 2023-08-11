@@ -20,7 +20,7 @@ def init_blueprint(app):
 def init_app(app):
     logger.debug("init app ")
 
-    Babel(app,)
+    Babel(app)
     db.init_app(app)
     Migrate(app, db)
     ma.init_app(app)
