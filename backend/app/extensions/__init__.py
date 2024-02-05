@@ -5,8 +5,11 @@
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 
 from flask import Flask
-from .init_db import init_db
+
+from .init_db import init_db, db
+from .init_i18n import init_i18n
 
 
 def init_plugs(app: Flask) -> None:
     init_db(app)
+    init_i18n(app)

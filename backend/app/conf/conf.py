@@ -17,6 +17,8 @@ class Config(object):
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = 'mysql://zhengzongwei:zhengzongwei@106.54.39.146:16030/app'
+    BABEL_DEFAULT_LOCALE = 'zh'
+    LANGUAGES = ['en', 'zh']
 
 
 class TestingConfig(Config):
