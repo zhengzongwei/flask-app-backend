@@ -6,34 +6,23 @@
 
 import os
 from flask import Flask
-from conf.conf import config as conf
+
+from conf.conf import config as config
+from extensions import init_plugs
 
 
-def create_app(config=None):
-    app = Flask(__name__, instance_relative_config=True)
+def create_app(conf=None):
+    app = Flask(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    # app = Flask(__name__, instance_relative_config=True)
 
-    if config is None:
-        app.config.from_pyfile('conf.py', silent=True)
-    else:
-        app.config.from_object(conf.get(config, 'development'))
+    # 加载配置
+    app.config.from_object(config.get(conf))
 
-    try:
-        os.makedirs(app.instance_path)
-    except OSError as e:
-        pass
+    # 注册插件
+    init_plugs(app)
+
+    # 注册蓝图
+
+    # 注册命令
 
     return app
-
-
-if __name__ == '__main__':
-    import os
-
-    environment = os.getenv('FLASK_ENV', 'development')
-
-    # 创建 Flask 应用程序
-    app = create_app(environment)
-
-    # 在这里可以添加额外的配置，如端口号等
-
-    # 运行 Flask 应用程序
-    app.run()
