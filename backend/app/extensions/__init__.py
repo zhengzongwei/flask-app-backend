@@ -13,5 +13,4 @@ from .init_migrate import init_migrate
 def init_plugs(app: Flask) -> None:
     init_db(app)
     init_i18n(app)
-
     init_migrate(app)

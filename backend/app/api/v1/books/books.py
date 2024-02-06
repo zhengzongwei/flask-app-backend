@@ -11,12 +11,17 @@ from app.models.books.book import Book
 from app.schemas.books import BookSchema
 from app.api.api import success_response, error_response
 from app.extensions import db
+from app.common.utils.logs import Logger
+
+logger = Logger('books')
 
 bp = Blueprint('/', __name__, url_prefix='/')
 
 
 @bp.route('/')
 def books():
+    # logger.error("测试测试")
+    logger.error("ceshi123")
     data = Book.query.all()
     books_data = BookSchema(many=True).dump(data)
     return success_response(data=books_data)
