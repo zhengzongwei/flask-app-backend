@@ -1,0 +1,23 @@
+POST http://{{url}}/books/add
+Content-Type: application/json
+
+{
+  "books": [
+    {
+      "name":"KVM 虚拟机管理",
+      "author":"徐波"
+    }
+  ]
+}
+
+###
+
+###
+GET http://{{url}}/books
+Accept: application/json
+
+###
+
+
+
+

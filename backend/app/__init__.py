@@ -25,8 +25,7 @@ def create_app():
         pass
     # 加载配置
     FLASK_ENV = os.environ.get('FLASK_ENV')
-    print(FLASK_ENV)
-    if FLASK_ENV is None:
+    if FLASK_ENV is None or FLASK_ENV not in ['development', 'production','testing']:
         app.config.from_object(config['development'])
     else:
         app.config.from_object(config[FLASK_ENV])
