@@ -5,8 +5,8 @@
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 
 from flask import Flask, Blueprint
-from api.api import bp as api_bp
-from api.v1 import v1_bp,init_v1_bps
+from app.api.api import bp as api_bp
+from app.api.v1 import v1_bp,init_v1_bps
 apis_bp = Blueprint('api', __name__, url_prefix='/api')
 
 

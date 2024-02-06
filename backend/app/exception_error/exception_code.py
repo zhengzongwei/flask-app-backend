@@ -4,8 +4,8 @@
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 
 
-Error = {
-    -1: "Internal Error",
+exception_code = {
+    -1: "Internal Server Error",
     0: "Success",
 
 }

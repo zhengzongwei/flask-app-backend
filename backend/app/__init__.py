@@ -7,9 +7,9 @@
 import os
 from flask import Flask
 
-from api import init_bps
-from conf.conf import config as config
-from extensions import init_plugs
+from app.api import init_bps
+from app.conf.conf import config as config
+from app.extensions import init_plugs
 from flask_babel import Babel
 
 
@@ -24,7 +24,6 @@ def create_app(conf=None):
         pass
     # 加载配置
     app.config.from_object(config.get(conf))
-    print(app.config)
     # 注册插件
     init_plugs(app)
 

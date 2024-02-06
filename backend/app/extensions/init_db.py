@@ -20,7 +20,6 @@ def init_db(app: Flask):
         with app.app_context():
             try:
                 db.engine.connect()
-                db.create_all()
 
             except Exception as e:
                 exit(f"数据库连接失败: {e}")
