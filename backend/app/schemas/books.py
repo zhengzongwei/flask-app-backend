@@ -1,20 +1,52 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2024/2/6 10:29                              
+# @Time    : 2024/2/6 10:29
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
-
-from flask_marshmallow.sqla import SQLAlchemyAutoSchema
+from marshmallow import fields, pre_load
 from marshmallow import validates, ValidationError
 
-from app.models.books.book import Book
+from app.models.books.book import Book, Author
 from flask_babel import _
+from app.common.utils.logs import Logger
+from app.extensions import ma
+
+logger = Logger("BookSchema")
 
 
-class BookSchema(SQLAlchemyAutoSchema):
+#
+# class PublishSchema(SQLAlchemyAutoSchema):
+#     class Meta:
+#         model = Publish
+#         load_instance = True
+#         exclude = ("deleted_at",)
+class AuthorSchema(ma.SQLAlchemyAutoSchema):
+    # name = fields.String(required=True)
+    class Meta:
+        model = Author
+        include_fk = True
+        load_instance = True
+        exclude = ("deleted_at",)
+
+
+class BookSchema(ma.SQLAlchemyAutoSchema):
+    authors = fields.List(fields.Nested(AuthorSchema()))
+    isbn = fields.Str(required=True)
+
     class Meta:
         model = Book
         # 自动加载到实例对象中
         load_instance = True
+        include_fk = True
+        exclude = ("deleted_at",)
+
+    # authors = fields.List(fields.Nested(AuthorSchema()), required=True)
+
+    # publisher = fields.List(fields.Nested(PublishSchema))
+
+    @validates("authors")
+    def validate_authors(self, values):
+        if not values:
+            raise ValidationError(_("No authors"))
 
     @validates('name')
     def validate_name(self, value):
@@ -26,19 +58,33 @@ class BookSchema(SQLAlchemyAutoSchema):
         if value.year > 2022:
             raise ValidationError(_('Publication date cannot be in the future'))
 
+    # 删除书籍校验
+    @staticmethod
+    def validate_delete_book_data(data):
+        if not data.get("book_ids"):
+            raise ValidationError("Book IDs are required for deletion.")
+        if not isinstance(data["book_ids"], list) or not all(isinstance(book_id, int) for book_id in data["book_ids"]):
+            raise ValidationError("Invalid book IDs format.")
+
+        return data["book_ids"]
+
 
 if __name__ == '__main__':
-    book_data = {
+    book_data = [{
         'name': 'Sample Book',
-        'author': 'John Doe',
+        'authors': [
+            {'name': 'john Uh1'},
+            {'name': 'john Uh2'},
+            {'name': 'john Uh3'},
+        ],
         'publication_date': '2021-02-15',
         'isbn': '1234567890'
-    }
+    }]
 
     book_schema = BookSchema()
     try:
         # 反序列化数据并进行校验
-        book = book_schema.load(book_data)
+        book = book_schema.load(book_data, many=True)
         # 如果校验通过，可以将数据保存到数据库中
         # db.session.add(book)
         # db.session.commit()

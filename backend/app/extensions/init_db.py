@@ -27,8 +27,3 @@ def init_db(app: Flask):
 
             except Exception as e:
                 exit(f"数据库连接失败: {e}")
-
-
-class Quer(BaseQuery):
-    def all_json(self, schema: Marshmallow().Schema):
-        return schema(many=True).dump(self.all())

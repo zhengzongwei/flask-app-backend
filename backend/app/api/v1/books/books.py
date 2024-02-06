@@ -5,13 +5,13 @@
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 
 from flask import Blueprint, request
-from marshmallow import ValidationError
 
 from app.models.books.book import Book
 from app.schemas.books import BookSchema
 from app.api.api import success_response, error_response
-from app.extensions import db
 from app.common.utils.logs import Logger
+
+from app.dao.books import BookDao
 
 logger = Logger('books')
 
@@ -19,23 +19,28 @@ bp = Blueprint('/', __name__, url_prefix='/')
 
 
 @bp.route('/')
-def books():
-    # logger.error("测试测试")
-    logger.error("ceshi123")
-    data = Book.query.all()
-    books_data = BookSchema(many=True).dump(data)
-    return success_response(data=books_data)
+@bp.route('/<id>', methods=['GET'])
+def books(id=None):
+    if id:
+        book = Book.query.filter_by(id=id, is_deleted=False).first()
+        if not book:
+            return error_response('Book not found', 404)
+        return BookSchema().dump(book)
+    else:
+        data = Book.query.filter_by(is_deleted=False).all()
+        books_data = BookSchema(many=True).dump(data)
+        return success_response(data=books_data)
 
 
-@bp.route('/add', methods=['POST'])
+@bp.route('/', methods=['POST'])
 def add_book():
-    params = request.json
-    try:
-        books = BookSchema(many=True).load(params['books'])
-        db.session.add_all(books)
-        db.session.commit()
+    books = BookSchema().load(request.json['books'], many=True)
+    BookDao.create_book(books)
+    return success_response()
 
-    except ValidationError as err:
-        db.session.rollback()
-        return error_response(err.messages), 400
+
+@bp.route('/', methods=['DELETE'])
+def delete_book():
+    books = BookSchema().validate_delete_book_data(request.json)
+    BookDao.delete_book(books)
     return success_response()
