@@ -10,7 +10,6 @@ from flask import Flask
 from app.api import init_bps
 from app.conf.conf import config as config
 from app.extensions import init_plugs
-from flask_babel import Babel
 
 
 def create_app():
@@ -25,7 +24,7 @@ def create_app():
         pass
     # 加载配置
     FLASK_ENV = os.environ.get('FLASK_ENV')
-    if FLASK_ENV is None or FLASK_ENV not in ['development', 'production','testing']:
+    if FLASK_ENV is None or FLASK_ENV not in ['development', 'production', 'testing']:
         app.config.from_object(config['development'])
     else:
         app.config.from_object(config[FLASK_ENV])
@@ -40,6 +39,5 @@ def create_app():
     # 注册蓝图
     init_bps(app)
 
-    # 注册命令
-
+    # 注册日志
     return app

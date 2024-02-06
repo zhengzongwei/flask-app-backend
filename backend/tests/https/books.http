@@ -4,8 +4,19 @@ Content-Type: application/json
 {
   "books": [
     {
-      "name":"KVM 虚拟机管理",
-      "author":"徐波"
+      "name": "C# 程序设计与应用开发",
+      "authors": [
+        {
+          "name": "曾宪权"
+        },
+        {
+          "name": "曹玉松"
+        },
+        {
+          "name": "鄢靖丰"
+        }
+      ],
+      "isbn": "9787302571858"
     }
   ]
 }

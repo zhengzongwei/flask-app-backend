@@ -20,8 +20,6 @@ bp = Blueprint('/', __name__, url_prefix='/')
 
 @bp.route('/')
 def books():
-    # logger.error("测试测试")
-    logger.error("ceshi123")
     data = Book.query.all()
     books_data = BookSchema(many=True).dump(data)
     return success_response(data=books_data)
@@ -30,12 +28,15 @@ def books():
 @bp.route('/add', methods=['POST'])
 def add_book():
     params = request.json
+
     try:
         books = BookSchema(many=True).load(params['books'])
+        logger.debug("books")
         db.session.add_all(books)
         db.session.commit()
 
     except ValidationError as err:
+        logger.debug(err)
         db.session.rollback()
         return error_response(err.messages), 400
     return success_response()
