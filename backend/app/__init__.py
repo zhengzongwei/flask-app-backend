@@ -13,8 +13,9 @@ from app.extensions import init_plugs
 from flask_babel import Babel
 
 
-def create_app(conf=None):
+def create_app():
     app = Flask(__name__, instance_relative_config=True)
+
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = os.path.join(os.path.abspath(os.path.dirname(__file__)),
                                                                'translations')
 
@@ -23,7 +24,17 @@ def create_app(conf=None):
     except OSError:
         pass
     # 加载配置
-    app.config.from_object(config.get(conf))
+    FLASK_ENV = os.environ.get('FLASK_ENV')
+    print(FLASK_ENV)
+    if FLASK_ENV is None:
+        app.config.from_object(config['development'])
+    else:
+        app.config.from_object(config[FLASK_ENV])
+    # if app.debug:
+    #     app.config.from_object(config['development'])
+    # else:
+    #     app.config.from_object(config['production'])
+
     # 注册插件
     init_plugs(app)
 
