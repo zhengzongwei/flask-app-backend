@@ -33,7 +33,7 @@ Content-Type: application/json
 ###
 
 ###
-GET http://{{url}}/books
+GET http://{{url}}/books/
 Accept: application/json
 
 ###

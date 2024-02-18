@@ -19,7 +19,7 @@ class Book(BaseModel, db.Model):
     isbn = db.Column(db.String(20), unique=True, comment="ISBN")
     version = db.Column(db.String(10), comment="Book Version")
     url = db.Column(db.String(50), comment="Book URL")
-    is_delete = db.Column(db.Boolean, default=False)
+    is_deleted = db.Column(db.Boolean, default=False)
     authors = relationship("Author", secondary="book_m2m_author", backref='books', cascade="all, delete")
 
     # publisher = relationship("Publish", secondary="book_m2m_publish", back_populates='books')
