@@ -37,7 +37,7 @@ def error_response(code=-1, status_code=500):
     创建一个错误的 JSON 格式响应
     """
     response = {
-        "code": "exception_error",
+        "code": code,
         "message": _(exception_code.get(code)),
     }
     return jsonify(response), status_code

@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 # @Time    : 2024/2/5 11:33                              
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 
 from flask import Blueprint, request
 
-from app.models.books.book import Book
+from models.book import Book
 from app.schemas.books import BookSchema
 from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger
@@ -24,7 +23,7 @@ def books(id=None):
     if id:
         book = Book.query.filter_by(id=id, is_deleted=False).first()
         if not book:
-            return error_response('Book not found', 404)
+            return error_response(3001, 404)
         return BookSchema().dump(book)
     else:
         data = Book.query.filter_by(is_deleted=False).all()

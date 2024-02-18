@@ -1,0 +1,10 @@
+GET http://{{url}}/authors/{{$randomInt}}
+Accept: application/json
+
+###
+
+
+GET http://{{url}}/authors/
+Accept: application/json
+
+###
