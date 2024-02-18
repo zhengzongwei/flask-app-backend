@@ -20,10 +20,17 @@ bp = Blueprint('/', __name__, url_prefix='/')
 
 
 @bp.route('/')
-def books():
-    data = Book.query.filter_by(is_delete=False).all()
-    books_data = BookSchema(many=True).dump(data)
-    return success_response(data=books_data)
+@bp.route('/<id>', methods=['GET'])
+def books(id=None):
+    if id:
+        book = Book.query.filter_by(id=id, is_delete=False).first()
+        if not book:
+            return error_response('Book not found', 404)
+        return BookSchema().dump(book)
+    else:
+        data = Book.query.filter_by(is_delete=False).all()
+        books_data = BookSchema(many=True).dump(data)
+        return success_response(data=books_data)
 
 
 @bp.route('/', methods=['POST'])
