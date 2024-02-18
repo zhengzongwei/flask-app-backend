@@ -19,3 +19,4 @@ def register_api_blueprint(app: Flask) -> None:
 def init_bps(app: Flask) -> None:
     init_v1_bps(app)
     register_api_blueprint(app)
+

@@ -1,0 +1,49 @@
+#DELETE http://{{ip}}:{{port}}/api/v1/books/1
+#Accept: application/json
+#
+####
+
+GET http://{{ip}}:{{port}}/api/v1/books/
+Accept: application/json
+
+
+###
+
+PUT http://{{ip}}:{{port}}/api/v1/books/12
+Content-Type: application/json
+
+{
+  "books":
+    {
+      "name": "KVM 虚拟机管理",
+      "author": ["TTT"],
+      "publisher": ["中国出版社","清华大学出版社"]
+    }
+}
+
+###
+POST http://{{ip}}:{{port}}/api/v1/books/
+Content-Type: application/json
+
+{
+  "books": [
+    {
+      "name": "C# 程序设计与应用开发",
+      "author": ["曾宪权","曹玉松","鄢靖丰"],
+      "isbn": "9787302571858",
+      "publisher": ["清华大学出版社"]
+    }
+  ]
+}
+
+###
+
+
+
+
+GET http://{{ip}}:{{port}}/api/v1/admin/
+Accept: application/json
+
+###
+
+
