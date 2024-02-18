@@ -21,13 +21,24 @@ bp = Blueprint('/', __name__, url_prefix='/')
 
 @bp.route('/')
 def books():
-    data = Book.query.all()
+    data = Book.query.filter_by(is_delete=False).all()
     books_data = BookSchema(many=True).dump(data)
     return success_response(data=books_data)
 
 
-@bp.route('/add', methods=['POST'])
+@bp.route('/', methods=['POST'])
 def add_book():
     books = BookSchema().load(request.json['books'], many=True)
     BookDao.create_book(books)
+    return success_response()
+
+
+# @bp.route('/delete/<int:id>', methods=['DELETE'])
+# def delete_book(id):
+#     pass
+
+@bp.route('/', methods=['DELETE'])
+def delete_book():
+    books = BookSchema().validate_delete_book_data(request.json)
+    BookDao.delete_book(books)
     return success_response()

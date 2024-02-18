@@ -25,6 +25,7 @@ class AuthorSchema(ma.SQLAlchemyAutoSchema):
         model = Author
         include_fk = True
         load_instance = True
+        exclude = ("deleted_at",)
 
 
 class BookSchema(ma.SQLAlchemyAutoSchema):
@@ -56,6 +57,16 @@ class BookSchema(ma.SQLAlchemyAutoSchema):
     def validate_publication_date(self, value):
         if value.year > 2022:
             raise ValidationError(_('Publication date cannot be in the future'))
+
+    # 删除书籍校验
+    @staticmethod
+    def validate_delete_book_data(data):
+        if not data.get("book_ids"):
+            raise ValidationError("Book IDs are required for deletion.")
+        if not isinstance(data["book_ids"], list) or not all(isinstance(book_id, int) for book_id in data["book_ids"]):
+            raise ValidationError("Invalid book IDs format.")
+
+        return data["book_ids"]
 
 
 if __name__ == '__main__':
