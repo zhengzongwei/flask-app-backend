@@ -23,7 +23,6 @@ class Logger(object):
     def __init__(self, logger_name, logger_path="backend/app/conf/conf.toml") -> None:
 
         self.base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-        print(logger_path)
         self.log_config = dict()
         self.logger = None
         self.logger_conf = dict()

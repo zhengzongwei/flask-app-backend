@@ -1,62 +1,51 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2024/2/6 10:29                              
+# @Time    : 2024/2/6 10:29
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 from marshmallow import fields, pre_load
-from flask_marshmallow.sqla import SQLAlchemyAutoSchema
 from marshmallow import validates, ValidationError
 
 from app.models.books.book import Book, Author
 from flask_babel import _
+from app.common.utils.logs import Logger
+from app.extensions import ma
+
+logger = Logger("BookSchema")
 
 
-class AuthorSchema(SQLAlchemyAutoSchema):
+#
+# class PublishSchema(SQLAlchemyAutoSchema):
+#     class Meta:
+#         model = Publish
+#         load_instance = True
+#         exclude = ("deleted_at",)
+class AuthorSchema(ma.SQLAlchemyAutoSchema):
+    # name = fields.String(required=True)
     class Meta:
         model = Author
-        # 自动加载到实例对象中
+        include_fk = True
         load_instance = True
-        exclude = ("deleted_at",)
-
-    name = fields.String(required=True)
 
 
-class BookSchema(SQLAlchemyAutoSchema):
+class BookSchema(ma.SQLAlchemyAutoSchema):
+    authors = fields.List(fields.Nested(AuthorSchema()))
+    isbn = fields.Str(required=True)
+
     class Meta:
         model = Book
         # 自动加载到实例对象中
         load_instance = True
+        include_fk = True
         exclude = ("deleted_at",)
 
-    authors = fields.List(fields.Nested(AuthorSchema))
+    # authors = fields.List(fields.Nested(AuthorSchema()), required=True)
 
-    # def load(self, data, *, many=None, partial=None, **kwargs):
-    #     pass
+    # publisher = fields.List(fields.Nested(PublishSchema))
 
-    @pre_load
-    def pre_load(self, data, many=None, **kwargs):
-        print(data)
-        authors = data.get("authors", [])
-        _authors = []
-        for author in authors:
-            author_name = author.get('name')
-            existing_author = Author.query.filter_by(name=author_name).first()
-
-            if not existing_author:
-                Author(name=author_name)
-
-                # _authors.append(existing_author)
-            # else:
-
-            # _authors.append(new_author)
-        # data["authors"] = _authors
-        # print(_authors)
-        # print(data,'123')
-        return data
-
-    # @validates("authors")
-    # def validate_authors(self, values):
-    #     if not values:
-    #         raise ValidationError(_("No authors"))
+    @validates("authors")
+    def validate_authors(self, values):
+        if not values:
+            raise ValidationError(_("No authors"))
 
     @validates('name')
     def validate_name(self, value):
@@ -70,17 +59,21 @@ class BookSchema(SQLAlchemyAutoSchema):
 
 
 if __name__ == '__main__':
-    book_data = {
+    book_data = [{
         'name': 'Sample Book',
-        'author': 'John Doe',
+        'authors': [
+            {'name': 'john Uh1'},
+            {'name': 'john Uh2'},
+            {'name': 'john Uh3'},
+        ],
         'publication_date': '2021-02-15',
         'isbn': '1234567890'
-    }
+    }]
 
     book_schema = BookSchema()
     try:
         # 反序列化数据并进行校验
-        book = book_schema.load(book_data)
+        book = book_schema.load(book_data, many=True)
         # 如果校验通过，可以将数据保存到数据库中
         # db.session.add(book)
         # db.session.commit()

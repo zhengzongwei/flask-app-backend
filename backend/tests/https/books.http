@@ -4,7 +4,7 @@ Content-Type: application/json
 {
   "books": [
     {
-      "name": "C# 程序设计与应用开发",
+      "name": "F# 程序设计与应用开发",
       "authors": [
         {
           "name": "曾宪权"
@@ -16,7 +16,8 @@ Content-Type: application/json
           "name": "鄢靖丰"
         }
       ],
-      "isbn": "9787302571858"
+      "isbn": "9787302571832",
+      "publication_date": "2021-02-15"
     }
   ]
 }

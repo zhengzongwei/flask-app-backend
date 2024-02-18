@@ -10,8 +10,9 @@ from marshmallow import ValidationError
 from app.models.books.book import Book
 from app.schemas.books import BookSchema
 from app.api.api import success_response, error_response
-from app.extensions import db
 from app.common.utils.logs import Logger
+
+from app.dao.books import BookDao
 
 logger = Logger('books')
 
@@ -27,16 +28,6 @@ def books():
 
 @bp.route('/add', methods=['POST'])
 def add_book():
-    params = request.json
-
-    try:
-        books = BookSchema(many=True).load(params['books'])
-        logger.debug("books")
-        db.session.add_all(books)
-        db.session.commit()
-
-    except ValidationError as err:
-        logger.debug(err)
-        db.session.rollback()
-        return error_response(err.messages), 400
+    books = BookSchema().load(request.json['books'], many=True)
+    BookDao.create_book(books)
     return success_response()
