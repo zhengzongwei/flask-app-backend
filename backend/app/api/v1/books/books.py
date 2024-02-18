@@ -6,7 +6,7 @@
 
 from flask import Blueprint, request
 
-from app.models.books.book import Book
+from models.book import Book
 from app.schemas.books import BookSchema
 from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger
