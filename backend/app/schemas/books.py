@@ -2,13 +2,14 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2024/2/6 10:29
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
-from marshmallow import fields, pre_load
+from marshmallow import fields
 from marshmallow import validates, ValidationError
 
-from app.models.books.book import Book, Author
+from models.book import Book, Author
 from flask_babel import _
 from app.common.utils.logs import Logger
 from app.extensions import ma
+from app.schemas.authors import AuthorSchema
 
 logger = Logger("BookSchema")
 
@@ -19,13 +20,6 @@ logger = Logger("BookSchema")
 #         model = Publish
 #         load_instance = True
 #         exclude = ("deleted_at",)
-class AuthorSchema(ma.SQLAlchemyAutoSchema):
-    # name = fields.String(required=True)
-    class Meta:
-        model = Author
-        include_fk = True
-        load_instance = True
-        exclude = ("deleted_at",)
 
 
 class BookSchema(ma.SQLAlchemyAutoSchema):

@@ -39,6 +39,7 @@ class Author(BaseModel, db.Model):
     name = db.Column(db.String(80), unique=True, nullable=False)
     phone = db.Column(db.String(11))
     addr = db.Column(db.String(80))
+    is_deleted = db.Column(db.Boolean, default=False)
     # books = relationship("Book", secondary="book_m2m_author", back_populates="authors")
 
 
