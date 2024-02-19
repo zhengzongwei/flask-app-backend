@@ -15,10 +15,6 @@ class Logger(object):
     """
     基础日志类
     """
-    log_level = "info"
-    log_format = "%(asctime)s - %(name)s[func: %(funcName)s line:%(lineno)d] - %(levelname)s: %(message)s"
-    log_console = True
-    stacklevel = 2
 
     def __init__(self, logger_name, logger_path="backend/app/conf/conf.toml") -> None:
 
@@ -89,20 +85,30 @@ class Logger(object):
         if not os.path.exists(path):
             os.makedirs(path, exist_ok=True)
 
-    def _log(self, msg):
-        getattr(self.logger, self.logger_conf_level)(msg, stacklevel=self.stacklevel)
+    # def _log(self, msg):
+    #     getattr(self.logger, self.logger_conf_level)(msg, stacklevel=self.stacklevel)
 
-    def debug(self, msg):
-        self._log(msg)
+    def log(self, level, msg, stacklevel=None):
+        # 确定要调用的日志方法
+        log_method = getattr(self.logger, level)
 
-    def info(self, msg):
-        self._log(msg)
+        # 设置 stacklevel
+        if stacklevel is not None:
+            log_method(msg, stacklevel=stacklevel)
+        else:
+            log_method(msg, stacklevel=self.stacklevel)
 
-    def warning(self, msg):
-        self._log(msg)
+    def debug(self, msg, stacklevel=None):
+        self.log('debug', msg, stacklevel)
 
-    def error(self, msg):
-        self._log(msg)
+    def info(self, msg, stacklevel=None):
+        self.log('info', msg, stacklevel)
 
-    def critical(self, msg):
-        self._log(msg)
+    def warning(self, msg, stacklevel=None):
+        self.log('warning', msg, stacklevel)
+
+    def error(self, msg, stacklevel=None):
+        self.log('error', msg, stacklevel)
+
+    def critical(self, msg, stacklevel=None):
+        self.log('critical', msg, stacklevel)
