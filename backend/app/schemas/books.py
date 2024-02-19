@@ -5,7 +5,7 @@
 from marshmallow import fields
 from marshmallow import validates, ValidationError
 
-from models.book import Book, Author
+from app.models.book import Book, Author
 from flask_babel import _
 from app.common.utils.logs import Logger
 from app.extensions import ma

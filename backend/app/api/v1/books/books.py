@@ -5,12 +5,13 @@
 
 from flask import Blueprint, request
 
-from models.book import Book
+from app.models.book import Book
 from app.schemas.books import BookSchema
-from app.api.api import success_response, error_response
+from app.api.api import success_response,error_response
 from app.common.utils.logs import Logger
 
 from app.dao.books import BookDao
+from app.exceptions.books import BookNotFound
 
 logger = Logger('books')
 
@@ -23,7 +24,8 @@ def books(id=None):
     if id:
         book = Book.query.filter_by(id=id, is_deleted=False).first()
         if not book:
-            return error_response(3001, 404)
+            exception =  BookNotFound(book_id=id)
+            return error_response(code=exception.code, message=exception.message)
         return BookSchema().dump(book)
     else:
         data = Book.query.filter_by(is_deleted=False).all()

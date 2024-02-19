@@ -5,7 +5,8 @@
 from datetime import datetime
 
 from app.extensions import db
-from models.book import Author, Book
+from app.models.book import Author, Book
+from app.exceptions.books import BookDeletionError, BookCreationError, BookAlreadyExists, BookNotFound
 
 
 class BookDao(object):
@@ -14,6 +15,7 @@ class BookDao(object):
     def create_book(books):
         for book in books:
             authors = []
+            # TODO 检查书籍是否有重名
             for author in book.authors:
                 author_name = author.name
                 existing_author = Author.query.filter_by(name=author_name).first()
@@ -22,7 +24,7 @@ class BookDao(object):
                 else:
                     new_author = Author(name=author_name)
                     db.session.add(new_author)
-                    authors(new_author)
+                    authors.append(new_author)
                 book.authors = authors
         db.session.add_all(books)
         db.session.commit()
@@ -39,9 +41,6 @@ class BookDao(object):
                     book.is_delete = 1
                     book.deleted_at = datetime.now()
             db.session.commit()
-        except Exception as e:
+        except BookDeletionError:
             db.session.rollback()
-
-
-
-
+            return
