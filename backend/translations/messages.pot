@@ -1,0 +1,75 @@
+# Translations template for PROJECT.
+# Copyright (C) 2024 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2024.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2024-02-19 20:03+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.14.0\n"
+
+#: app/exceptions/__init__.py:14
+msgid "An unknown exception occurred."
+msgstr "未知异常"
+
+#: app/exceptions/authors.py:11
+#, python-format
+msgid "Author ID %(author_id)s not found."
+msgstr "作者ID %(author_id)s 未找到"
+
+#: app/exceptions/authors.py:16
+#, python-format
+msgid "Author ID %(author_id)s already exists."
+msgstr "作者ID %(author_id)s 已存在"
+
+#: app/exceptions/authors.py:21
+#, python-format
+msgid "Author ID %(author_id)s create failed"
+msgstr "作者ID %(author_id)s 创建失败"
+
+#: app/exceptions/authors.py:26
+#, python-format
+msgid "Author ID %(author_id)s delete failed"
+msgstr "作者ID %(author_id)s 删除失败"
+
+#: app/exceptions/books.py:12
+#, python-format
+msgid "Book ID %(book_id)s not found."
+msgstr "书籍ID %(book_id)s 未找到"
+
+#: app/exceptions/books.py:17
+#, python-format
+msgid "Book ID %(book_id)s already exists."
+msgstr "书籍ID %(book_id)s 已存在"
+
+#: app/exceptions/books.py:22
+#, python-format
+msgid "Book ID %(book_id)s create failed"
+msgstr "书籍ID %(book_id)s 创建失败"
+
+#: app/exceptions/books.py:27
+#, python-format
+msgid "Book ID %(book_id)s delete failed"
+msgstr "书籍ID %(book_id)s 删除失败"
+
+#: app/schemas/books.py:43
+msgid "No authors"
+msgstr "没有作者字段"
+
+#: app/schemas/books.py:48
+msgid "Name is required."
+msgstr "名称不能为空"
+
+#: app/schemas/books.py:53
+msgid "Publication date cannot be in the future"
+msgstr "发布日志不能是未来时间"
+
