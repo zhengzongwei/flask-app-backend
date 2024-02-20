@@ -37,7 +37,7 @@ def books(id=None):
 def add_book():
     books = BookSchema().load(request.json['books'], many=True)
     try:
-        BookDao.create_book(books)
+        BookDao.create_books(books)
     except BookAlreadyExists as e:
         return error_response(code=e.code, message=e.msg)
     return success_response()
