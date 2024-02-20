@@ -10,6 +10,8 @@ from flask_babel import _
 from app.common.utils.logs import Logger
 from app.extensions import ma
 from app.schemas.authors import AuthorSchema
+from app.extensions import db
+
 
 logger = Logger("BookSchema")
 
@@ -59,26 +61,42 @@ class BookSchema(ma.SQLAlchemyAutoSchema):
             raise ValidationError("Book IDs are required for deletion.")
         if not isinstance(data["book_ids"], list) or not all(isinstance(book_id, int) for book_id in data["book_ids"]):
             raise ValidationError("Invalid book IDs format.")
-
         return data["book_ids"]
 
 
 if __name__ == '__main__':
-    book_data = [{
-        'name': 'Sample Book',
-        'authors': [
-            {'name': 'john Uh1'},
-            {'name': 'john Uh2'},
-            {'name': 'john Uh3'},
+    # book_data = [{
+    #     'name': 'Sample Book',
+    #     'authors': [
+    #         {'name': 'john Uh1'},
+    #         {'name': 'john Uh2'},
+    #         {'name': 'john Uh3'},
+    #     ],
+    #     'publication_date': '2021-02-15',
+    #     'isbn': '1234567890'
+    # }]
+    book_data = {
+
+        "name": "C# 程序设计735",
+        "authors": [
+            {
+                "name": "曾宪权"
+            },
+            {
+                "name": "曹玉松"
+            },
+            {
+                "name": "鄢靖丰"
+            }
         ],
-        'publication_date': '2021-02-15',
-        'isbn': '1234567890'
-    }]
+        "isbn": "978730257606",
+        "publication_date": "2021-02-16",
+    }
 
     book_schema = BookSchema()
     try:
         # 反序列化数据并进行校验
-        book = book_schema.load(book_data, many=True)
+        book = book_schema.load(book_data, session=db.session)
         # 如果校验通过，可以将数据保存到数据库中
         # db.session.add(book)
         # db.session.commit()

@@ -11,7 +11,7 @@ from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger
 
 from app.dao.books import BookDao
-from app.exceptions.books import BookNotFound, BookAlreadyExists
+from app.exceptions.books import BookNotFound, BookAlreadyExists, BookDeletionError
 
 logger = Logger('books')
 
@@ -46,5 +46,18 @@ def add_book():
 @bp.route('/', methods=['DELETE'])
 def delete_book():
     books = BookSchema().validate_delete_book_data(request.json)
-    BookDao.delete_book(books)
+    try:
+        BookDao.delete_book(books)
+    except (BookDeletionError, BookNotFound) as e:
+        return error_response(code=e.code, message=e.msg)
+    return success_response()
+
+
+@bp.route('/<id>', methods=['PUT'])
+def update_book(id):
+    book = BookSchema().load(request.json['book'])
+    try:
+        BookDao.update_book(id, book)
+    except BookNotFound as e:
+        return error_response(code=e.code, message=e.msg)
     return success_response()

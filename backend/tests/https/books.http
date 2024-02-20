@@ -1,9 +1,36 @@
+PUT http://{{url}}/books/1
+Content-Type: application/json
+
+{
+  "book":
+    {
+
+      "name": "C# 程序设计",
+      "authors": [
+        {
+          "name": "曾宪权"
+        },
+        {
+          "name": "曹玉松"
+        },
+        {
+          "name": "鄢靖丰"
+        }
+      ],
+      "isbn": "978730257606",
+      "publication_date": "2021-02-16"
+    }
+
+}
+
+###
+
 DELETE http://{{url}}/books/
 Content-Type: application/json
 
 {
   "book_ids": [
-    1,
+    10,
     3
   ]
 }

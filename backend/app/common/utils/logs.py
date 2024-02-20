@@ -15,6 +15,10 @@ class Logger(object):
     """
     基础日志类
     """
+    log_level = "info"
+    log_format = "%(asctime)s - %(name)s[func: %(funcName)s line:%(lineno)d] - %(levelname)s: %(message)s"
+    log_console = True
+    stacklevel = 2
 
     def __init__(self, logger_name, logger_path="backend/app/conf/conf.toml") -> None:
 
