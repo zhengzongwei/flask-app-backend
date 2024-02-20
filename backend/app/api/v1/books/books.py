@@ -7,11 +7,11 @@ from flask import Blueprint, request
 
 from app.models.book import Book
 from app.schemas.books import BookSchema
-from app.api.api import success_response,error_response
+from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger
 
 from app.dao.books import BookDao
-from app.exceptions.books import BookNotFound
+from app.exceptions.books import BookNotFound, BookAlreadyExists
 
 logger = Logger('books')
 
@@ -24,8 +24,8 @@ def books(id=None):
     if id:
         book = Book.query.filter_by(id=id, is_deleted=False).first()
         if not book:
-            exception =  BookNotFound(book_id=id)
-            return error_response(code=exception.code, message=exception.message)
+            e = BookNotFound(book_id=id)
+            return error_response(code=e.code, message=e.message)
         return BookSchema().dump(book)
     else:
         data = Book.query.filter_by(is_deleted=False).all()
@@ -36,7 +36,10 @@ def books(id=None):
 @bp.route('/', methods=['POST'])
 def add_book():
     books = BookSchema().load(request.json['books'], many=True)
-    BookDao.create_book(books)
+    try:
+        BookDao.create_book(books)
+    except BookAlreadyExists as e:
+        return error_response(code=e.code, message=e.msg)
     return success_response()
 
 

@@ -14,7 +14,7 @@ class BookNotFound(exceptions.NotFound):
 
 class BookAlreadyExists(exceptions.ExistsError):
     code = 4002
-    message = _("Book ID %(book_id)s already exists.")
+    message = _("Book Name %(book_name)s already exists.")
 
 
 class BookCreationError(exceptions.CreateError):

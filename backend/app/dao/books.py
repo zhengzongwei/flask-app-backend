@@ -15,7 +15,11 @@ class BookDao(object):
     def create_book(books):
         for book in books:
             authors = []
-            # TODO 检查书籍是否有重名
+            book_name = book.name
+            existing_book = Book.query.filter_by(name=book_name).first()
+            if existing_book:
+                raise BookAlreadyExists(book_name=book_name)
+
             for author in book.authors:
                 author_name = author.name
                 existing_author = Author.query.filter_by(name=author_name).first()

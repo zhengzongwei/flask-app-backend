@@ -23,9 +23,8 @@ def authors(id=None):
     if id:
         author = Author.query.filter_by(id=id, is_deleted=False).first()
         if not author:
-            exception = AuthorNotFound(author_id=id)
-            return error_response(code=exception.code, message=exception.msg)
-            # raise AuthorNotFound(author_id=id)
+            e = AuthorNotFound(author_id=id)
+            return error_response(code=e.code, message=e.msg)
         return AuthorSchema().dump(author)
     else:
         data = Author.query.filter_by(is_deleted=False).all()
