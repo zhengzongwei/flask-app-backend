@@ -22,13 +22,13 @@ bp = Blueprint('/', __name__, url_prefix='/')
 @bp.route('/<id>', methods=['GET'])
 def books(id=None):
     if id:
-        book = Book.query.filter_by(id=id, is_deleted=False).first()
+        book = BookDao().get_book_by_id(id)
         if not book:
             e = BookNotFound(book_id=id)
             return error_response(code=e.code, message=e.message)
         return BookSchema().dump(book)
     else:
-        data = Book.query.filter_by(is_deleted=False).all()
+        data = BookDao.get_books()
         books_data = BookSchema(many=True).dump(data)
         return success_response(data=books_data)
 

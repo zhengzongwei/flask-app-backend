@@ -16,6 +16,10 @@ logger = Logger("BookDao")
 class BookDao(object):
 
     @staticmethod
+    def get_books():
+        return Book.query.filter_by(is_deleted=False).all()
+
+    @staticmethod
     def get_book_by_id(id):
         return Book.query.filter_by(id=id).first()
 
@@ -23,7 +27,7 @@ class BookDao(object):
     def get_book_by_name(name):
         return Book.query.filter_by(name=name).first()
 
-    def create_book(self,book):
+    def create_book(self, book):
         _book = self.get_book_by_name(book.name)
         if _book:
             raise BookAlreadyExists(book_name=_book.name)
@@ -61,7 +65,7 @@ class BookDao(object):
         # db.session.add_all(books)
         # db.session.commit()
 
-    def delete_book(self,book_ids):
+    def delete_book(self, book_ids):
         try:
             # 检查书籍是否存在
             for book_id in book_ids:
@@ -76,7 +80,7 @@ class BookDao(object):
         except BookDeletionError:
             db.session.rollback()
 
-    def update_book(self,id, book):
+    def update_book(self, id, book):
         logger.info(f"Update book {book.name}")
         db_book = self.get_book_by_id(id)
         if not book:

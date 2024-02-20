@@ -21,13 +21,13 @@ bp = Blueprint('/', __name__, url_prefix='/')
 @bp.route('/<id>', methods=['GET'])
 def authors(id=None):
     if id:
-        author = Author.query.filter_by(id=id, is_deleted=False).first()
+        author = AuthorDao().get_author_by_id(id)
         if not author:
             e = AuthorNotFound(author_id=id)
             return error_response(code=e.code, message=e.msg)
         return AuthorSchema().dump(author)
     else:
-        data = Author.query.filter_by(is_deleted=False).all()
+        data = AuthorDao().get_authors()
         authors_data = AuthorSchema(many=True).dump(data)
         return success_response(data=authors_data)
 
@@ -39,4 +39,14 @@ def delete_author():
         AuthorDao.delete_author(authors)
     except AuthorDeletionError as e:
         return error_response(e.code, e.message)
+    return success_response()
+
+
+@bp.route('/<id>', methods=['PUT'])
+def update_author(id):
+    book = AuthorSchema().load(request.json['book'])
+    try:
+        AuthorDao.update_author(id, book)
+    except AuthorNotFound as e:
+        return error_response(code=e.code, message=e.msg)
     return success_response()

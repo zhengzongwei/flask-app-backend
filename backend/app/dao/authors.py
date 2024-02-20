@@ -14,6 +14,10 @@ def get_author_by_name(name):
 class AuthorDao(object):
 
     @staticmethod
+    def get_authors():
+        return Author.query.filter_by(is_deleted=False).all()
+
+    @staticmethod
     def get_author_by_id(id):
         return Author.query.filter_by(id=id, is_deleted=False).first()
 
@@ -43,3 +47,6 @@ class AuthorDao(object):
                     raise AuthorDeletionError(author_id=author_id)
         except AuthorDeletionError:
             db.session.rollback()
+
+    def update_book(self, id, book):
+        pass
