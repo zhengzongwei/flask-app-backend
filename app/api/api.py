@@ -7,13 +7,14 @@ import datetime
 from flask import Blueprint, jsonify, request
 from flask_babel import _
 from app.exception_error.exception_code import exception_code
+
 bp = Blueprint('/', __name__, url_prefix='/')
 
 
 @bp.route('/')
 def api_info():
     data = {
-            "api_version": 'v1',
+        "api_version": 'v1',
     }
 
     return success_response(data)

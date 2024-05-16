@@ -4,7 +4,7 @@
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 from flask import Blueprint, request
 
-from models.book import Author
+from app.models.book import Author
 from app.schemas.books import AuthorSchema
 from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger

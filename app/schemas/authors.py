@@ -3,7 +3,7 @@
 # @Time    : 2024/2/18 17:38                              
 # @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 
-from models.book import Author
+from app.models.book import Author
 from flask_babel import _
 from app.common.utils.logs import Logger
 from app.extensions import ma

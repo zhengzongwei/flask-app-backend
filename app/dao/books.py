@@ -5,7 +5,7 @@
 from datetime import datetime
 
 from app.extensions import db
-from models.book import Author, Book
+from app.models.book import Author, Book
 
 
 class BookDao(object):
