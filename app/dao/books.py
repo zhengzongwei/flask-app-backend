@@ -11,6 +11,10 @@ from app.models.book import Author, Book
 class BookDao(object):
 
     @staticmethod
+    def list_book():
+        return Book.query.filter_by(is_deleted=False).all()
+
+    @staticmethod
     def create_book(books):
         for book in books:
             authors = []
