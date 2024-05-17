@@ -1,14 +1,19 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#  Copyright (c)2024. zhengzongwei
+#  flask-app-backend is licensed under Mulan PSL v2.
+#  You can use this software according to the terms and conditions of the Mulan PSL v2.
+#  You may obtain a copy of Mulan PSL v2 at:
+#          http://license.coscl.org.cn/MulanPSL2
+#  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+#  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+#  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+#  See the Mulan PSL v2 for more details.
+
 import os
 
 from flask import Flask
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_sqlalchemy.query import Query as BaseQuery
-
-# @Time    : 2024/2/4 16:03
-# @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 
 
 db = SQLAlchemy()

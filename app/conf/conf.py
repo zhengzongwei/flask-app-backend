@@ -1,8 +1,12 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-# @Time    : 2024/2/4 15:50                              
-# @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
+#  Copyright (c)2024. zhengzongwei
+#  flask-app-backend is licensed under Mulan PSL v2.
+#  You can use this software according to the terms and conditions of the Mulan PSL v2.
+#  You may obtain a copy of Mulan PSL v2 at:
+#          http://license.coscl.org.cn/MulanPSL2
+#  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+#  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+#  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+#  See the Mulan PSL v2 for more details.
 
 # DEBUG = True
 # SECRET_KEY = 'dev'
@@ -16,7 +20,8 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = 'mysql://zhengzongwei:zhengzongwei@106.54.39.146:16030/app'
+    # SQLALCHEMY_DATABASE_URI = 'mysql://zhengzongwei:zhengzongwei@106.54.39.146:16030/app'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:mysql@127.0.0.1:3306/app'
     BABEL_DEFAULT_LOCALE = 'zh'
     LANGUAGES = ['en', 'zh']
 
