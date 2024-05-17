@@ -7,3 +7,20 @@
 #  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
 #  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #  See the Mulan PSL v2 for more details.
+
+from app.models.book import Author
+
+
+class AuthorDao(object):
+
+    @staticmethod
+    def list_author():
+        return Author.query.filter_by(is_deleted=False).all()
+
+    @staticmethod
+    def get_author_by_id(id):
+        return Author.query.filter_by(id=id, is_deleted=False).first()
+
+    @staticmethod
+    def get_author_by_name(name):
+        return Author.query.filter_by(name=name, is_deleted=False).first()
