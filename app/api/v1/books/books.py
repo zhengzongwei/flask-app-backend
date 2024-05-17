@@ -20,15 +20,22 @@ bp = Blueprint('/', __name__, url_prefix='/')
 @bp.route('/')
 @bp.route('/<id>', methods=['GET'])
 def books(id=None):
+    # 获取查询参数
+    name = request.args.get('name')
+
     if id:
-        book = Book.query.filter_by(id=id, is_deleted=False).first()
-        if not book:
-            return error_response('Book not found', 404)
-        return BookSchema().dump(book)
+        book = Book.get_by_id(id)
+    elif name:
+        book = Book.get_by_name(name)
     else:
         data = Book.query.filter_by(is_deleted=False).all()
         books_data = BookSchema(many=True).dump(data)
         return success_response(data=books_data)
+
+    # 执行查询
+    if not book:
+        return error_response('Book not found', 404)
+    return BookSchema().dump(book)
 
 
 @bp.route('/', methods=['POST'])

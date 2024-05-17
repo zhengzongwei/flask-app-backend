@@ -28,3 +28,7 @@ def authors(id=None):
         data = Author.query.filter_by(is_deleted=False).all()
         authors_data = AuthorSchema(many=True).dump(data)
         return success_response(data=authors_data)
+
+@bp.route('/', methods=['POST'])
+def create_author():
+    pass

@@ -42,6 +42,10 @@ class BookDao(object):
         except Exception as e:
             db.session.rollback()
 
+    @staticmethod
+    def get_book_by_id(book_id):
+        return Book.query.filter_by(id=book_id, is_deleted=False).first()
 
-
-
+    @staticmethod
+    def get_book_by_name(name):
+        return Book.query.filter_by(name=name, is_deleted=False).first()
