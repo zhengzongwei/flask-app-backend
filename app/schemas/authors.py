@@ -12,6 +12,8 @@ from app.models.book import Author
 from flask_babel import _
 from app.common.utils.logs import Logger
 from app.extensions import ma
+from marshmallow import validates, ValidationError
+
 
 logger = Logger("AuthorSchema")
 
@@ -23,3 +25,9 @@ class AuthorSchema(ma.SQLAlchemyAutoSchema):
         include_fk = True
         load_instance = True
         exclude = ("deleted_at",)
+
+    @validates('name')
+    def validate_name(self, name):
+        if not name:
+            raise ValidationError(_('Name is required.'))
+
