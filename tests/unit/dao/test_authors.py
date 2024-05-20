@@ -34,10 +34,10 @@ class TestAuthorDao(unittest.TestCase):
     def test_create_author(self):
         create_author_data = [
             {
-                'name': 'NIEANTAI'
+                'name': 'NIEANTAI1'
             },
             {
-                'name': 'HUJINYONG'
+                'name': 'HUJINYONG1'
             }
         ]
         authors = AuthorSchema().load(create_author_data, many=True)
@@ -48,12 +48,23 @@ class TestAuthorDao(unittest.TestCase):
         # return self.author.list_author()
         print(self.author_schema.dump(author))
 
+    def test_edit_author(self):
+        author_data = {
+            "name": "NIEANTAI1",
+            "phone": "saass",
+            "addr": "test",
+        }
+        author_schema = AuthorSchema()
+        author = author_schema.load(author_data,partial=True)
+        self.author.edit_author(4, author)
+
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
-    # suite.addTest(TestAuthorDao('test_create_author'))
-    suite.addTest(TestAuthorDao('test_list_author'))
-    runner = unittest.TextTestRunner()
+    # # suite.addTest(TestAuthorDao('test_create_author'))
+    # suite.addTest(TestAuthorDao('test_list_author'))
+    suite.addTest(TestAuthorDao('test_edit_author'))
+    # runner = unittest.TextTestRunner()
     runner.run(suite)
 
     # unittest.main()

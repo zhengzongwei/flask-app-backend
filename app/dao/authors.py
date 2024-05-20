@@ -7,6 +7,9 @@
 #  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
 #  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #  See the Mulan PSL v2 for more details.
+from datetime import datetime
+from http.client import HTTPException
+
 from app.extensions import db
 from app.models.book import Author
 from app.schemas.authors import AuthorSchema
@@ -28,6 +31,8 @@ class AuthorDao(object):
 
     @staticmethod
     def create_author(authors):
+        if not isinstance(authors, list):
+            authors = [authors]
         schema = AuthorSchema()
         _authors = []
         for author in authors:
@@ -43,3 +48,33 @@ class AuthorDao(object):
         db.session.add_all(_authors)
         db.session.commit()
         return _authors
+
+    @staticmethod
+    def delete_author(ids):
+        try:
+            for id in ids:
+                author = Author.query.filter_by(id=id).first()
+                if author:
+                    author.is_deleted = 1
+                    book.deleted_at = datetime.now()
+        except Exception as e:
+            db.session.rollback()
+            raise e
+        db.session.commit()
+
+    @staticmethod
+    def edit_author(id, data):
+        author = Author.query.filter_by(id=id, is_deleted=False).first()
+        if not author:
+            raise HTTPException(status_code=404, detail='Author not found')
+
+        # 将新的数据加载到现有的author对象实例中
+        # schema = AuthorSchema()
+        # schema.load(data, instance=author, session=db.session)
+        # 更新作者对象的字段
+        for key, value in data.items():
+            setattr(author, key, value)
+        db.session.add(author)
+        db.session.commit()
+        # 保存更新到数据库
+        # return updated_author

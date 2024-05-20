@@ -13,21 +13,32 @@ from flask_babel import _
 from app.common.utils.logs import Logger
 from app.extensions import ma
 from marshmallow import validates, ValidationError
-
+from marshmallow import fields
 
 logger = Logger("AuthorSchema")
 
 
 class AuthorSchema(ma.SQLAlchemyAutoSchema):
-    # name = fields.String(required=True)
+    name = fields.String(required=True)
     class Meta:
         model = Author
-        include_fk = True
-        load_instance = True
-        exclude = ("deleted_at",)
+        # include_fk = True
+        # load_instance = True
+        exclude = ("deleted_at","is_deleted","created_at","updated_at")
 
     @validates('name')
     def validate_name(self, name):
         if not name:
             raise ValidationError(_('Name is required.'))
 
+
+
+if __name__ == '__main__':
+    author = AuthorSchema()
+    # author_data = {
+    #     "name": "NIEANTAI1",
+    #     "phone": "saass",
+    #     "addr": "test",
+    # }
+    # _author = author.load(author_data)
+    # print(_author)
