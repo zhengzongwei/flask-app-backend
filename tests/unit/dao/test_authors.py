@@ -29,7 +29,7 @@ class TestAuthorDao(unittest.TestCase):
     def tearDown(self):
         db.session.remove()
         # db.drop_all()
-        # self.app_context.pop()
+        self.app_context.pop()
 
     def test_create_author(self):
         create_author_data = [
@@ -44,14 +44,14 @@ class TestAuthorDao(unittest.TestCase):
         self.author.create_author(authors)
 
     def test_list_author(self):
-        author = self.author.list_author()
+        author = self.author.list_author(offset=0, limit=20)
         # return self.author.list_author()
         print(self.author_schema.dump(author))
 
 
 if __name__ == '__main__':
     suite = unittest.TestSuite()
-    suite.addTest(TestAuthorDao('test_create_author'))
+    # suite.addTest(TestAuthorDao('test_create_author'))
     suite.addTest(TestAuthorDao('test_list_author'))
     runner = unittest.TextTestRunner()
     runner.run(suite)

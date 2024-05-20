@@ -1,41 +1,34 @@
-#  Copyright (c)2024. zhengzongwei
-#  flask-app-backend is licensed under Mulan PSL v2.
-#  You can use this software according to the terms and conditions of the Mulan PSL v2.
-#  You may obtain a copy of Mulan PSL v2 at:
-#          http://license.coscl.org.cn/MulanPSL2
-#  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-#  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-#  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-#  See the Mulan PSL v2 for more details.
-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time    : 2024/2/18 10:45
+# @Author  :  zhengzongwei<zhengzongwei@foxmail.com>
 from datetime import datetime
 
 from app.extensions import db
 from app.models.book import Author, Book
+from app.schemas.books import BookSchema
+from app.dao.authors import AuthorDao
 
 
 class BookDao(object):
 
     @staticmethod
-    def list_book():
-        return Book.query.filter_by(is_deleted=False).all()
+    def list_book(offset=0, limit=1):
+
+        return Book.query.filter_by(is_deleted=False).offset(offset).limit(limit).all()
 
     @staticmethod
     def create_book(books):
-        for book in books:
-            authors = []
-            for author in book.authors:
-                author_name = author.name
-                existing_author = Author.query.filter_by(name=author_name).first()
-                if existing_author:
-                    authors.append(existing_author)
-                else:
-                    new_author = Author(name=author_name)
-                    db.session.add(new_author)
-                    authors(new_author)
+        author_dao = AuthorDao()
+        try:
+            for book in books:
+                authors = author_dao.create_author(book.authors)
                 book.authors = authors
-        db.session.add_all(books)
-        db.session.commit()
+            db.session.add_all(books)
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            raise e
 
     @staticmethod
     def delete_book(book_ids):
@@ -48,9 +41,10 @@ class BookDao(object):
                     # db.session.delete(book)
                     book.is_delete = 1
                     book.deleted_at = datetime.now()
-            db.session.commit()
         except Exception as e:
             db.session.rollback()
+            raise e
+        db.session.commit()
 
     @staticmethod
     def get_book_by_id(book_id):

@@ -15,8 +15,8 @@ from app.schemas.authors import AuthorSchema
 class AuthorDao(object):
 
     @staticmethod
-    def list_author():
-        return Author.query.filter_by(is_deleted=False).all()
+    def list_author(offset=0, limit=10):
+        return Author.query.filter_by(is_deleted=False).offset(offset).limit(limit).all()
 
     @staticmethod
     def get_author_by_id(id):
@@ -38,8 +38,8 @@ class AuthorDao(object):
                 author_dict = schema.dump(author)
                 author = Author(**author_dict)
                 db.session.add(author)
-
                 _authors.append(author)
 
         db.session.add_all(_authors)
         db.session.commit()
+        return _authors

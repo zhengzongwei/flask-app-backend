@@ -25,13 +25,13 @@ class TestBookDao(unittest.TestCase):
 
     def tearDown(self):
         db.session.remove()
-        db.drop_all()
-        self.app_context.pop()
+        # db.drop_all()
+        # self.app_context.pop()
 
     def test_create_book(self):
         create_book_data = [
             {
-                "name": "C# 程序设计{{$randomInt}}",
+                "name": "C# 程序设计",
                 "authors": [
                     {
                         "name": "曾宪权"
@@ -43,7 +43,7 @@ class TestBookDao(unittest.TestCase):
                         "name": "鄢靖丰"
                     }
                 ],
-                "isbn": "978730257{{$randomInt}}",
+                "isbn": "978730257",
                 "publication_date": "2021-02-15"
             }
         ]
@@ -51,7 +51,7 @@ class TestBookDao(unittest.TestCase):
         self.book.create_book(books)
 
     def test_list_book(self):
-        book = self.book.list_book()
+        book = self.book.list_book(offset=0, limit=20)
         print(book)
 
 
