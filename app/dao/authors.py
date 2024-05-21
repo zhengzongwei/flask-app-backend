@@ -35,13 +35,12 @@ class AuthorDao(object):
             authors = [authors]
         schema = AuthorSchema()
         _authors = []
+        print(authors)
         for author in authors:
             existing_author = Author.query.filter_by(name=author.name).first()
             if existing_author:
                 _authors.append(existing_author)
             else:
-                author_dict = schema.dump(author)
-                author = Author(**author_dict)
                 db.session.add(author)
                 _authors.append(author)
 
@@ -68,13 +67,8 @@ class AuthorDao(object):
         if not author:
             raise HTTPException(status_code=404, detail='Author not found')
 
-        # 将新的数据加载到现有的author对象实例中
-        # schema = AuthorSchema()
-        # schema.load(data, instance=author, session=db.session)
         # 更新作者对象的字段
         for key, value in data.items():
             setattr(author, key, value)
         db.session.add(author)
         db.session.commit()
-        # 保存更新到数据库
-        # return updated_author

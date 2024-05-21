@@ -42,6 +42,6 @@ def create_app():
 
     # 注册蓝图
     init_bps(app)
-
+    print(app.url_map)
     # 注册日志
     return app

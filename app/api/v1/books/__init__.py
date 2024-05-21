@@ -10,10 +10,7 @@
 
 from flask import Blueprint
 
-from .books import bp as book_bp
+books_prefix = 'books'
+books_bp = Blueprint(books_prefix, __name__, url_prefix=f'/{books_prefix}')
 
-books_bp = Blueprint('books',__name__,url_prefix='/books')
-
-
-def init_book_bps(app) -> None:
-    books_bp.register_blueprint(book_bp)
+from . import books

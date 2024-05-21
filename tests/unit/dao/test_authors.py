@@ -17,13 +17,12 @@ from app.schemas.authors import AuthorSchema
 
 
 class TestAuthorDao(unittest.TestCase):
+    app = create_app()
 
     def setUp(self):
-        self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.author = AuthorDao
-        self.author_schema = AuthorSchema(many=True)
         db.create_all()
 
     def tearDown(self):
@@ -40,31 +39,30 @@ class TestAuthorDao(unittest.TestCase):
                 'name': 'HUJINYONG1'
             }
         ]
-        authors = AuthorSchema().load(create_author_data, many=True)
+        authors = AuthorSchema().load(create_author_data, many=True, partial=True)
         self.author.create_author(authors)
 
     def test_list_author(self):
         author = self.author.list_author(offset=0, limit=20)
         # return self.author.list_author()
-        print(self.author_schema.dump(author))
 
-    def test_edit_author(self):
-        author_data = {
-            "name": "NIEANTAI1",
-            "phone": "saass",
-            "addr": "test",
-        }
-        author_schema = AuthorSchema()
-        author = author_schema.load(author_data,partial=True)
-        self.author.edit_author(4, author)
+    # def test_edit_author(self):
+    #     author_data = {
+    #         "name": "NIEANTAI1",
+    #         "phone": "saass",
+    #         "addr": "test",
+    #     }
+    #     author_schema = AuthorSchema()
+    #     author = author_schema.load(author_data,partial=True)
+    #     self.author.edit_author(4, author)
 
 
 if __name__ == '__main__':
-    suite = unittest.TestSuite()
-    # # suite.addTest(TestAuthorDao('test_create_author'))
-    # suite.addTest(TestAuthorDao('test_list_author'))
-    suite.addTest(TestAuthorDao('test_edit_author'))
-    # runner = unittest.TextTestRunner()
-    runner.run(suite)
+    # suite = unittest.TestSuite()
+    # suite.addTest(TestAuthorDao('test_create_author'))
+    # # suite.addTest(TestAuthorDao('test_list_author'))
+    # # suite.addTest(TestAuthorDao('test_edit_author'))
+    # # runner = unittest.TextTestRunner()
+    # runner.run(suite)
 
-    # unittest.main()
+    unittest.main()

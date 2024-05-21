@@ -10,10 +10,7 @@
 
 from flask import Blueprint
 
-from .authors import bp as author_bp
+authors_url_prefix = 'authors'
+authors_bp = Blueprint(authors_url_prefix, __name__, url_prefix=f'/{authors_url_prefix}')
 
-authors_bp = Blueprint('authors',__name__,url_prefix='/authors')
-
-
-def init_author_bps(app) -> None:
-    authors_bp.register_blueprint(author_bp)
+from . import authors

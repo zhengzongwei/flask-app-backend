@@ -10,14 +10,10 @@
 
 from flask import Blueprint
 
-from .books import init_book_bps, books_bp
-from .auhtors import init_author_bps, authors_bp
+from .auhtors.authors import bp as authors_bp
+from .books.books import bp as books_bp
 
-v1_bp = Blueprint('v1', __name__, url_prefix='/v1')
-
-
-def init_v1_bps(app) -> None:
-    init_book_bps(app)
-    init_author_bps(app)
-    v1_bp.register_blueprint(authors_bp)
-    v1_bp.register_blueprint(books_bp)
+v1_prefix = 'v1'
+v1_bp = Blueprint(v1_prefix, __name__, url_prefix=f'{v1_prefix}')
+v1_bp.register_blueprint(authors_bp)
+v1_bp.register_blueprint(books_bp)

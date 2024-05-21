@@ -16,8 +16,9 @@ from app.extensions.init_db import db
 
 
 class TestBookDao(unittest.TestCase):
+    app = create_app()
+
     def setUp(self):
-        self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
         self.book = BookDao()
@@ -31,7 +32,7 @@ class TestBookDao(unittest.TestCase):
     def test_create_book(self):
         create_book_data = [
             {
-                "name": "C# 程序设计",
+                "name": "C# 程序设计1",
                 "authors": [
                     {
                         "name": "曾宪权"
@@ -43,7 +44,7 @@ class TestBookDao(unittest.TestCase):
                         "name": "鄢靖丰"
                     }
                 ],
-                "isbn": "978730257",
+                "isbn": "978730257w",
                 "publication_date": "2021-02-15"
             }
         ]

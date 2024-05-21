@@ -19,11 +19,10 @@ logger = Logger("AuthorSchema")
 
 
 class AuthorSchema(ma.SQLAlchemyAutoSchema):
-    name = fields.String(required=True)
     class Meta:
         model = Author
-        # include_fk = True
-        # load_instance = True
+        include_fk = True
+        load_instance = True
         exclude = ("deleted_at","is_deleted","created_at","updated_at")
 
     @validates('name')

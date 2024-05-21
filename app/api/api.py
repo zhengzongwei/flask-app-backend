@@ -14,7 +14,8 @@ from flask import Blueprint, jsonify, request
 from flask_babel import _
 from app.exception_error.exception_code import exception_code
 
-bp = Blueprint('/', __name__, url_prefix='/')
+api_prefix = 'api'
+bp = Blueprint(api_prefix, __name__, url_prefix=f'/{api_prefix}')
 
 
 @bp.route('/')

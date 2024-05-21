@@ -16,10 +16,9 @@ from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger
 
 from app.dao.books import BookDao
+from . import books_bp as bp
 
 logger = Logger('books')
-
-bp = Blueprint('/', __name__, url_prefix='/')
 
 
 @bp.route('/')

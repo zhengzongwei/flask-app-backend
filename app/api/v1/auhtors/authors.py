@@ -10,6 +10,7 @@
 
 from flask import Blueprint, request
 
+from app.dao.authors import AuthorDao
 from app.models.book import Author
 from app.schemas.books import AuthorSchema
 from app.api.api import success_response, error_response
@@ -17,10 +18,9 @@ from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger
 
 from app.dao.books import BookDao
+from . import authors_bp as bp
 
 logger = Logger('authors')
-
-bp = Blueprint('/', __name__, url_prefix='/')
 
 
 @bp.route('/')
@@ -36,6 +36,26 @@ def authors(id=None):
         authors_data = AuthorSchema(many=True).dump(data)
         return success_response(data=authors_data)
 
+
 @bp.route('/', methods=['POST'])
 def create_author():
+    data = request.json
+    create_many = False
+    if isinstance(data, list):
+        create_many = True
+
+    _authors = AuthorSchema.load(request.json['authors'], many=create_many)
+    AuthorDao.create_author(_authors)
+    return success_response('Author created', 201)
+
+
+@bp.route('/', methods=['DELETE'])
+def delete_author():
     pass
+
+
+@bp.route('/<id>', methods=['PUT'])
+def edit_author(id=None):
+    author = AuthorSchema.load(request.get_json(), partial=True)
+    AuthorDao.edit_author(id, author)
+    return success_response('Author edited', 204)
