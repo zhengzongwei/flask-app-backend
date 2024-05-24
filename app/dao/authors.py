@@ -7,68 +7,79 @@
 #  EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
 #  MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 #  See the Mulan PSL v2 for more details.
+
 from datetime import datetime
-from http.client import HTTPException
 
 from app.extensions import db
 from app.models.book import Author
-from app.schemas.authors import AuthorSchema
+
+from app.exceptions import exceptions
 
 
 class AuthorDao(object):
 
     @staticmethod
     def list_author(offset=0, limit=10):
-        return Author.query.filter_by(is_deleted=False).offset(offset).limit(limit).all()
+        return (
+            Author.query.filter_by(is_deleted=False).offset(offset).limit(limit).all()
+        )
 
     @staticmethod
-    def get_author_by_id(id):
-        return Author.query.filter_by(id=id, is_deleted=False).first()
+    def get_author_by_id(author_id):
+        return Author.query.filter_by(id=author_id, is_deleted=False).first()
 
     @staticmethod
     def get_author_by_name(name):
         return Author.query.filter_by(name=name, is_deleted=False).first()
 
-    @staticmethod
-    def create_author(authors):
+    def create_author(self, authors):
         if not isinstance(authors, list):
             authors = [authors]
-        schema = AuthorSchema()
         _authors = []
         print(authors)
         for author in authors:
-            existing_author = Author.query.filter_by(name=author.name).first()
+            existing_author = self.get_author_by_name(author.name)
             if existing_author:
                 _authors.append(existing_author)
             else:
-                db.session.add(author)
+                try:
+                    db.session.add(author)
+                except Exception as e:
+                    db.session.rollback()
+                    raise e
                 _authors.append(author)
-
-        db.session.add_all(_authors)
+        try:
+            db.session.add_all(_authors)
+        except Exception as e:
+            db.session.rollback()
+            raise e
         db.session.commit()
         return _authors
 
-    @staticmethod
-    def delete_author(ids):
+    def delete_author(self, ids):
+
         try:
-            for id in ids:
-                author = Author.query.filter_by(id=id).first()
+            for _id in ids:
+                author = self.get_author_by_id(_id)
                 if author:
                     author.is_deleted = 1
-                    book.deleted_at = datetime.now()
+                    author.deleted_at = datetime.now()
         except Exception as e:
             db.session.rollback()
             raise e
         db.session.commit()
 
-    @staticmethod
-    def edit_author(id, data):
-        author = Author.query.filter_by(id=id, is_deleted=False).first()
+    def edit_author(self, author_id, data):
+        author = self.get_author_by_id(author_id=author_id)
         if not author:
-            raise HTTPException(status_code=404, detail='Author not found')
+            raise exceptions.AuthorNotFound(author_id)
 
         # 更新作者对象的字段
         for key, value in data.items():
             setattr(author, key, value)
-        db.session.add(author)
+        try:
+            db.session.add(author)
+        except Exception as e:
+            db.session.rollback()
+            raise e
         db.session.commit()

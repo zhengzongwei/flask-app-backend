@@ -18,9 +18,15 @@ from app.api.api import success_response, error_response
 from app.common.utils.logs import Logger
 
 from app.dao.books import BookDao
+from app.exceptions import exceptions
 from . import authors_bp as bp
 
 logger = Logger('authors')
+
+
+@bp.errorhandler(exceptions.DBException)
+def invalid_api_usage(e):
+    return error_response(e.message, e.http_code)
 
 
 @bp.route('/')
@@ -51,7 +57,10 @@ def create_author():
 
 @bp.route('/', methods=['DELETE'])
 def delete_author():
-    pass
+    aa = AuthorDao.delete_author([1, 2])
+    if aa.code != 0:
+        raise exceptions.DBException(aa.message)
+    return success_response('Author deleted', 204)
 
 
 @bp.route('/<id>', methods=['PUT'])
