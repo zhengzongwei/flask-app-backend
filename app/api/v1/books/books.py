@@ -28,15 +28,17 @@ def books(id=None):
     name = request.args.get('name')
 
     if id:
-        book = Book.get_by_id(id)
+        book = BookDao.get_book_by_id(id)
     elif name:
-        book = Book.get_by_name(name)
+        book = BookDao.get_book_by_name(name)
     else:
-        data = Book.query.filter_by(is_deleted=False).all()
+        offset = request.args.get('offset', default=0, type=int)
+        limit = request.args.get('limit', default=10, type=int)
+
+        data = BookDao.list_book(offset, limit)
         books_data = BookSchema(many=True).dump(data)
         return success_response(data=books_data)
 
-    # 执行查询
     if not book:
         return error_response('Book not found', 404)
     return BookSchema().dump(book)
@@ -45,12 +47,18 @@ def books(id=None):
 @bp.route('/', methods=['POST'])
 def add_book():
     books = BookSchema().load(request.json['books'], many=True)
-    BookDao.create_book(books)
+    try:
+        BookDao.create_book(books)
+    except Exception as e:
+        return error_response(e.message, e.http_status)
     return success_response()
 
 
 @bp.route('/', methods=['DELETE'])
 def delete_book():
     books = BookSchema().validate_delete_book_data(request.json)
-    BookDao.delete_book(books)
+    try:
+        BookDao.delete_book(books)
+    except Exception as e:
+        return error_response(e.message, e.http_status)
     return success_response()

@@ -8,13 +8,12 @@ from app.extensions import db
 from app.models.book import Author, Book
 from app.schemas.books import BookSchema
 from app.dao.authors import AuthorDao
-
+from app.exceptions import exceptions
 
 class BookDao(object):
 
     @staticmethod
-    def list_book(offset=0, limit=1):
-
+    def list_book(offset=0, limit=10):
         return Book.query.filter_by(is_deleted=False).offset(offset).limit(limit).all()
 
     @staticmethod
@@ -26,9 +25,9 @@ class BookDao(object):
                 book.authors = authors
             db.session.add_all(books)
             db.session.commit()
-        except Exception as e:
+        except exceptions.BookCreateException as e:
             db.session.rollback()
-            raise e
+            raise exceptions.BookCreateException(str(e))
 
     @staticmethod
     def delete_book(book_ids):
@@ -38,12 +37,11 @@ class BookDao(object):
                 book = Book.query.filter_by(id=book_id).first()
                 if book:
                     book.authors.clear()
-                    # db.session.delete(book)
                     book.is_delete = 1
                     book.deleted_at = datetime.now()
         except Exception as e:
             db.session.rollback()
-            raise e
+            raise exceptions.BookDeleteException(e)
         db.session.commit()
 
     @staticmethod

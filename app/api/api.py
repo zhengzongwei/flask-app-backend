@@ -45,6 +45,6 @@ def error_response(message=None, status_code=500):
     创建一个错误的 JSON 格式响应
     """
     response = {
-        "message":message,
+        "message": message,
     }
     return jsonify(response), status_code

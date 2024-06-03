@@ -24,21 +24,25 @@ from . import authors_bp as bp
 logger = Logger('authors')
 
 
-@bp.errorhandler(exceptions.DBException)
-def invalid_api_usage(e):
-    return error_response(e.message, e.http_code)
-
+# @bp.errorhandler(exceptions.DBException)
+# def invalid_api_usage(e):
+#     if isinstance(e, HTTPException):
+#
+#     return error_response(e.message, e.http_code)
 
 @bp.route('/')
 @bp.route('/<id>', methods=['GET'])
 def authors(id=None):
     if id:
-        book = Author.query.filter_by(id=id, is_deleted=False).first()
-        if not book:
-            return error_response('Author not found', 404)
+        try:
+            book = AuthorDao.get_author_by_id(id)
+        except Exception as e:
+            return error_response(e.message, e.http_status)
         return AuthorSchema().dump(book)
     else:
-        data = Author.query.filter_by(is_deleted=False).all()
+        offset = request.args.get('offset', default=0, type=int)
+        limit = request.args.get('limit', default=10, type=int)
+        data = AuthorDao().list_author(offset, limit)
         authors_data = AuthorSchema(many=True).dump(data)
         return success_response(data=authors_data)
 
@@ -46,25 +50,32 @@ def authors(id=None):
 @bp.route('/', methods=['POST'])
 def create_author():
     data = request.json
+    authors_data = data.get("authors", None)
     create_many = False
-    if isinstance(data, list):
+    if isinstance(authors_data, list):
         create_many = True
-
-    _authors = AuthorSchema.load(request.json['authors'], many=create_many)
-    AuthorDao.create_author(_authors)
+    _authors = AuthorSchema().load(authors_data, many=create_many)
+    try:
+        AuthorDao().create_author(_authors)
+    except Exception as e:
+        return error_response(e.message, e.http_code)
     return success_response('Author created', 201)
 
 
 @bp.route('/', methods=['DELETE'])
 def delete_author():
-    aa = AuthorDao.delete_author([1, 2])
-    if aa.code != 0:
-        raise exceptions.DBException(aa.message)
+    try:
+        AuthorDao().delete_author(request.json.get('authors_id', []))
+    except Exception as e:
+        return error_response(e.message, e.http_code)
     return success_response('Author deleted', 204)
 
 
 @bp.route('/<id>', methods=['PUT'])
 def edit_author(id=None):
     author = AuthorSchema.load(request.get_json(), partial=True)
-    AuthorDao.edit_author(id, author)
+    try:
+        AuthorDao().edit_author(id, author)
+    except Exception as e:
+        return error_response(e.message, e.http_code)
     return success_response('Author edited', 204)

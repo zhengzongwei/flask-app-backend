@@ -1,4 +1,28 @@
+POST http://{{url}}/authors/
+Content-Type: application/json
+
+{
+  "authors": [
+    {
+      "name": "NIEANTAI11"
+    },
+    {
+      "name": "HUJINYON23G1"
+    }
+  ]
+}
+
+###
 GET http://{{url}}/authors/
 Accept: application/json
 
+####
+
+DELETE http://{{url}}/authors/
+Accept: application/json
+
 ###
+
+#PUT http://{{url}}/authors/
+#Accept: application/json
+
