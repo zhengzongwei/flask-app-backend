@@ -23,7 +23,7 @@ class AuthorSchema(ma.SQLAlchemyAutoSchema):
         model = Author
         include_fk = True
         load_instance = True
-        exclude = ("deleted_at","is_deleted","created_at","updated_at")
+        exclude = ("deleted_at", "is_deleted", "created_at", "updated_at")
 
     @validates('name')
     def validate_name(self, name):
@@ -31,13 +31,12 @@ class AuthorSchema(ma.SQLAlchemyAutoSchema):
             raise ValidationError(_('Name is required.'))
 
 
-
 if __name__ == '__main__':
     author = AuthorSchema()
-    # author_data = {
-    #     "name": "NIEANTAI1",
-    #     "phone": "saass",
-    #     "addr": "test",
-    # }
-    # _author = author.load(author_data)
-    # print(_author)
+    author_data = {
+        "name": "NIEANTAI1",
+        "phone": "saass",
+        "addr": "test",
+    }
+    _author = author.load(author_data, partial=True)
+    print(_author)

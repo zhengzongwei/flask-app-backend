@@ -70,15 +70,17 @@ class AuthorDao(object):
         db.session.commit()
 
     def edit_author(self, author_id, data):
+
         author = self.get_author_by_id(author_id=author_id)
         if not author:
             raise exceptions.AuthorNotFound(author_id)
 
         # 更新作者对象的字段
         for key, value in data.items():
-            setattr(author, key, value)
+            if hasattr(author, key):
+                setattr(author, key, value)
         try:
-            db.session.add(author)
+            db.session.commit()
         except Exception as e:
             db.session.rollback()
             raise exceptions.AuthorUpdateException(e)

@@ -41,7 +41,7 @@ class Book(BaseModel, db.Model):
 
 class Author(BaseModel, db.Model):
     __tablename__ = "db_authors"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True,)
     name = db.Column(db.String(80), unique=True, nullable=False)
     phone = db.Column(db.String(11))
     addr = db.Column(db.String(80))

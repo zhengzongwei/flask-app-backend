@@ -4,10 +4,10 @@ Content-Type: application/json
 {
   "authors": [
     {
-      "name": "NIEANTAI11"
+      "name": "NIEANTAIsd11"
     },
     {
-      "name": "HUJINYON23G1"
+      "name": "HUJINYONsdd23G1"
     }
   ]
 }
@@ -19,10 +19,25 @@ Accept: application/json
 ####
 
 DELETE http://{{url}}/authors/
-Accept: application/json
+Content-Type: application/json
+
+{
+  "authors_id": [
+    11,
+    10
+  ]
+}
 
 ###
 
-#PUT http://{{url}}/authors/
-#Accept: application/json
+PUT http://{{url}}/authors/9
+Accept: application/json
+Content-Type: application/json
 
+{
+  "name": "NIsdssdassdadaassEANTAI1",
+  "phone": "saassss",
+  "addr": "test"
+}
+
+###

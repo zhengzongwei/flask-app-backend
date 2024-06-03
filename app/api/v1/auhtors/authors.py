@@ -71,9 +71,9 @@ def delete_author():
     return success_response('Author deleted', 204)
 
 
-@bp.route('/<id>', methods=['PUT'])
+@bp.route('/<int:id>', methods=['PUT'])
 def edit_author(id=None):
-    author = AuthorSchema.load(request.get_json(), partial=True)
+    author = AuthorSchema(load_instance=False).load(request.get_json(), partial=True, )
     try:
         AuthorDao().edit_author(id, author)
     except Exception as e:
